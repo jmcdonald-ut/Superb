@@ -1,0 +1,18 @@
+{
+  "name": "superb-ui",
+  "private": true,
+  "scripts": {
+    "start": "dotnet tool restore && dotnet fable watch SuperbUi --runFast vite",
+    "build": "dotnet tool restore && dotnet fable SuperbUi --run vite build",
+    "clean": "dotnet fable clean . --yes"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^3.1.0",
+    "vite": "^4.1.0"
+  },
+  "packageManager": "yarn@4.2.2"
+}

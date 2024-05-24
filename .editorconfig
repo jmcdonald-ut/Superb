@@ -1,0 +1,14 @@
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+[*.{fs,fsi,fsx}]
+indent_size = 2
+fsharp_multiline_bracket_style = stroustrup
+
+[*.{js,json,yml}]
+charset = utf-8
+indent_style = space
+indent_size = 2
