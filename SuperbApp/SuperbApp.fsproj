@@ -7,7 +7,9 @@
 
   <ItemGroup>
     <Compile Include="Schemata.fs" />
-    <Compile Include="Library.fs" />
+    <Compile Include="Processes.fs" />
+    <Compile Include="TcpListeners.fs" />
+    <Compile Include="SuperbApp.fs" />
   </ItemGroup>
 
 </Project>

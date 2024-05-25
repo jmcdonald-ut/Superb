@@ -34,8 +34,8 @@ module Program =
     let app = builder.Build()
 
     app.UseHttpsRedirection()
-
     app.UseAuthorization()
+
     app.MapControllers()
     app.MapGet("/", Func<string>(fun () -> "Welcome to Superb!")) |> ignore
     app.MapGraphQL()
