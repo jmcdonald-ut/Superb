@@ -7,7 +7,7 @@ open SuperbGraphQL
 
 module Helpers =
   let client =
-    new SuperbGraphQL.SuperbGraphQLGraphqlClient("https://localhost:7011/graphql")
+    SuperbGraphQL.SuperbGraphQLGraphqlClient("https://localhost:7011/graphql")
 
   let orEmptyString = Option.defaultValue ""
 

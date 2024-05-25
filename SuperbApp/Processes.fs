@@ -19,7 +19,7 @@ module Processes =
         ?redirectStandardInput: bool
       ) =
       let startInfo: ProcessStartInfo =
-        new ProcessStartInfo(
+        ProcessStartInfo(
           FileName = executableName,
           Arguments = arguments,
           UseShellExecute = (defaultArg useShellExecute false),
@@ -36,21 +36,21 @@ module Processes =
         Inspect = sprintf "`%s %s`" executableName arguments
       }
 
-  let resultOfExit (executableProcess: ExecutableProcess) (forward: 'a) =
+  let resultOfExit (executableProcess: ExecutableProcess) (forward: 'Result) =
     executableProcess.Executable.WaitForExit()
 
     match executableProcess.Executable.ExitCode with
     | 0 -> Ok(forward)
     | errorCode -> Error(sprintf "%s failed with error code %i" executableProcess.Inspect errorCode)
 
-  let executeTap (callback: (Process) -> 'a) (executableProcess: ExecutableProcess) =
+  let executeTap (callback: (Process) -> 'Result) (executableProcess: ExecutableProcess) =
     match executableProcess.Executable.Start() with
     | false -> Error(sprintf "%s failed to start" executableProcess.Inspect)
     | true ->
       callback (executableProcess.Executable) |> ignore
       resultOfExit executableProcess executableProcess
 
-  let executeCapture (callback: (Process) -> 'a) (executableProcess: ExecutableProcess) =
+  let executeCapture (callback: (Process) -> 'Result) (executableProcess: ExecutableProcess) =
     match executableProcess.Executable.Start() with
     | false -> Error(sprintf "%s failed to start" executableProcess.Inspect)
     | true -> executableProcess.Executable |> callback |> resultOfExit executableProcess
