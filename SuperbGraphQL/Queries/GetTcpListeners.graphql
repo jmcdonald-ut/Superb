@@ -1,0 +1,8 @@
+query GetTcpListeners {
+  tcpListeners {
+    command
+    hosts
+    processId
+    user
+  }
+}

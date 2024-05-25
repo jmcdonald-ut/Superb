@@ -142,3 +142,5 @@ pids
 paket-files/
 .env*
 !.env.sample
+
+SuperbUi/src/SuperbUi

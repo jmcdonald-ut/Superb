@@ -19,6 +19,12 @@
       "commands": [
         "fable"
       ]
+    },
+    "snowflaqe": {
+      "version": "1.47.0",
+      "commands": [
+        "snowflaqe"
+      ]
     }
   }
 }

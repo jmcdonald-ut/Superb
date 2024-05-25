@@ -1,0 +1,7 @@
+{
+  "schema": "https://localhost:7011/graphql",
+  "queries": "SuperbGraphQL/Queries",
+  "project": "SuperbGraphQL",
+  "output": "SuperbGraphQL",
+  "asyncReturnType": "async"
+}

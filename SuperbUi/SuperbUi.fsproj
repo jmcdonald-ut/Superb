@@ -10,5 +10,8 @@
     <Compile Include="src/Extensions.fs" />
     <Compile Include="src/Main.fs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SuperbGraphQL\SuperbGraphQL.fsproj" />
+  </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
