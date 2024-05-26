@@ -1,8 +1,6 @@
 namespace SuperbUi
 
-open Fable.React
 open Feliz
-open Feliz.Router
 
 type DashboardComponents() =
   /// <summary>

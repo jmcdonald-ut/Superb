@@ -9,6 +9,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuperbUi", "SuperbUi\Superb
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuperbApp", "SuperbApp\SuperbApp.fsproj", "{D460B446-B809-4735-9D2F-531870FDD6EB}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuperbGraphQL", "SuperbGraphQL\SuperbGraphQL.fsproj", "{2944D5B2-F6AC-4F0C-A784-6587F76936C4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{D460B446-B809-4735-9D2F-531870FDD6EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D460B446-B809-4735-9D2F-531870FDD6EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D460B446-B809-4735-9D2F-531870FDD6EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2944D5B2-F6AC-4F0C-A784-6587F76936C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2944D5B2-F6AC-4F0C-A784-6587F76936C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2944D5B2-F6AC-4F0C-A784-6587F76936C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2944D5B2-F6AC-4F0C-A784-6587F76936C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
