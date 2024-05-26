@@ -6,7 +6,9 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="src/index.html" />
-    <Compile Include="src/Components.fs" />
+    <Compile Include="src/GraphQLClient.fs" />
+    <Compile Include="src/DashboardComponents.fs" />
+    <Compile Include="src/Containers.fs" />
     <Compile Include="src/Extensions.fs" />
     <Compile Include="src/Main.fs" />
   </ItemGroup>
