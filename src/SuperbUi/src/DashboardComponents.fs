@@ -14,18 +14,11 @@ type DashboardComponents() =
       prop.children [ Daisy.cardBody [ Daisy.cardTitle title; Html.div children ] ]
     ]
 
-  [<ReactComponent>]
-  static member ExternalLink(href: string, text: string) =
-    Html.a [ prop.href href; prop.target "_blank"; prop.text text ]
-
   /// <summary>
   /// Presents a single TCP listener as a table row.
   /// </summary>
   [<ReactComponent>]
   static member TcpRow(tcpListener: GraphQLClient.TcpListener) =
-    let toLi (host: string) = Html.li host
-
-    // Yeah
     Html.tr [
       prop.className "align-top"
       prop.children [
@@ -34,7 +27,7 @@ type DashboardComponents() =
         Html.td [ prop.className "align-top"; prop.text tcpListener.command ]
         Html.td [
           prop.className "align-top"
-          prop.children [ Html.ul (Seq.map toLi tcpListener.hosts) ]
+          prop.children [ Html.ul (Seq.map Components.ListItem tcpListener.hosts) ]
         ]
       ]
     ]
@@ -71,14 +64,13 @@ type DashboardComponents() =
     let commentsUrl (storyId: int) =
       sprintf "https://news.ycombinator.com/item?id=%d" storyId
 
-    // Yeah
     Html.tr [
       prop.className "align-top"
       prop.children [
-        Html.td [ DashboardComponents.ExternalLink(href = story.url, text = story.title) ]
-        Html.td [ DashboardComponents.ExternalLink(href = (userUrl story.by), text = story.by) ]
+        Html.td [ Components.ExternalLink(href = story.url, text = story.title) ]
+        Html.td [ Components.ExternalLink(href = (userUrl story.by), text = story.by) ]
         Html.td [
-          DashboardComponents.ExternalLink(href = (commentsUrl story.storyId), text = story.commentCount.ToString())
+          Components.ExternalLink(href = (commentsUrl story.storyId), text = story.commentCount.ToString())
         ]
       ]
     ]

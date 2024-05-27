@@ -9,23 +9,23 @@ type Containers =
   /// </summary>
   [<ReactComponent>]
   static member DashboardContainer() =
-    let (tcpListeners, setTcpListeners) =
+    let (tcpListeners: GraphQLClient.TcpListener list, setTcpListeners) =
       React.useState<GraphQLClient.TcpListener list> ([])
 
-    let (hackerNewsStories, setHackerNewsStories) =
+    let (hackerNewsStories: GraphQLClient.HackerNewsStory list, setHackerNewsStories) =
       React.useState<GraphQLClient.HackerNewsStory list> ([])
 
     let getTcpListeners () =
       async {
         match! GraphQLClient.getTcpListeners () with
-        | Ok tcpListeners -> tcpListeners |> setTcpListeners |> ignore
+        | Ok(tcpListeners: GraphQLClient.TcpListener list) -> tcpListeners |> setTcpListeners |> ignore
         | Error _ -> ()
       }
 
     let getHackerNewsStories () =
       async {
         match! GraphQLClient.getHackerNewsStories () with
-        | Ok stories -> stories |> setHackerNewsStories |> ignore
+        | Ok(stories: GraphQLClient.HackerNewsStory list) -> stories |> setHackerNewsStories |> ignore
         | Error _ -> ()
       }
 
@@ -34,7 +34,7 @@ type Containers =
 
     Html.div [
       theme.nord
-      prop.className "container mx-auto grid grid-cols-2 py-4 gap-4"
+      prop.className "container mx-auto grid grid-cols-1 lg:grid-cols-2 py-8 gap-4"
       prop.children [
         Html.div [ DashboardComponents.TcpListeners(tcpListeners = tcpListeners) ]
         Html.div [
