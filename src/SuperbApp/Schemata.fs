@@ -1,5 +1,8 @@
 namespace SuperbApp
 
+open HotChocolate
+open HotChocolate.Types
+
 module Schemata =
   type TcpListener = {
     ProcessId: string
@@ -14,3 +17,16 @@ module Schemata =
       User = "<UNKNOWN>"
       Hosts = []
     }
+
+  type TcpListenerType(tcpListener: TcpListener) =
+    [<GraphQLType(typeof<NonNullType<StringType>>)>]
+    member _.ProcessId = tcpListener.ProcessId
+
+    [<GraphQLType(typeof<NonNullType<StringType>>)>]
+    member _.Command = tcpListener.Command
+
+    [<GraphQLType(typeof<NonNullType<StringType>>)>]
+    member _.User = tcpListener.User
+
+    [<GraphQLType(typeof<NonNullType<ListType<NonNullType<StringType>>>>)>]
+    member _.Hosts = tcpListener.Hosts

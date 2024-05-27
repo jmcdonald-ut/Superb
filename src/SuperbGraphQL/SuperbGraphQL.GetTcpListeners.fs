@@ -1,13 +1,13 @@
 [<RequireQualifiedAccess>]
 module rec SuperbGraphQL.GetTcpListeners
 
-type TcpListener = {
-  command: Option<string>
-  hosts: Option<list<Option<string>>>
-  processId: Option<string>
-  user: Option<string>
+type TcpListenerType = {
+  command: string
+  hosts: list<string>
+  processId: string
+  user: string
 }
 
 type Query = {
-  tcpListeners: Option<list<Option<TcpListener>>>
+  tcpListeners: Option<list<Option<TcpListenerType>>>
 }

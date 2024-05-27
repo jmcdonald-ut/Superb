@@ -13,12 +13,7 @@ module GraphQLClient =
     commentCount: int
   }
 
-  type TcpListener = {
-    command: string
-    hosts: string list
-    processId: string
-    user: string
-  }
+  type TcpListener = GetTcpListeners.TcpListenerType
   // fsharplint:enable RecordFieldNames
 
   /// <summary>
@@ -72,20 +67,9 @@ module GraphQLClient =
   /// </returns>
   let getTcpListeners () =
     async {
-      let fromOptionOrUnknownString = Option.defaultValue "<UNKNOWN>"
-      let fromOptionOrEmptyList = Option.defaultValue []
-      let mapOptionsToUnknown = List.map fromOptionOrUnknownString
-
-      let toTcpListener (listener: GetTcpListeners.TcpListener) : TcpListener = {
-        command = fromOptionOrUnknownString listener.command
-        hosts = listener.hosts |> fromOptionOrEmptyList |> mapOptionsToUnknown
-        processId = fromOptionOrUnknownString listener.processId
-        user = fromOptionOrUnknownString listener.user
-      }
-
       let intoNewListIfSomething (newList: TcpListener list) =
         function
-        | Some listener -> (toTcpListener listener) :: newList
+        | Some listener -> listener :: newList
         | None -> newList
 
       let foldIntoNormalizedList = List.fold intoNewListIfSomething []
