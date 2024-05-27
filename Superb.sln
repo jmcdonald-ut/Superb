@@ -11,6 +11,10 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuperbApp", "src\SuperbApp\
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuperbGraphQL", "src\SuperbGraphQL\SuperbGraphQL.fsproj", "{2944D5B2-F6AC-4F0C-A784-6587F76936C4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{D030DD95-F744-48C7-A3E8-BBE92A812623}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuperbApp.Tests", "tests\SuperbApp.Tests\SuperbApp.Tests.fsproj", "{695C24DE-1123-469B-93A8-D93AE1926E9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +40,12 @@ Global
 		{2944D5B2-F6AC-4F0C-A784-6587F76936C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2944D5B2-F6AC-4F0C-A784-6587F76936C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2944D5B2-F6AC-4F0C-A784-6587F76936C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{695C24DE-1123-469B-93A8-D93AE1926E9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{695C24DE-1123-469B-93A8-D93AE1926E9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{695C24DE-1123-469B-93A8-D93AE1926E9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{695C24DE-1123-469B-93A8-D93AE1926E9F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{695C24DE-1123-469B-93A8-D93AE1926E9F} = {D030DD95-F744-48C7-A3E8-BBE92A812623}
 	EndGlobalSection
 EndGlobal
