@@ -3,8 +3,8 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  root: "./SuperbUi/src",
+  root: "./src/SuperbUi/src",
   build: {
-    outDir: "./SuperbUi/dist",
+    outDir: "./src/SuperbUi/dist",
   }
 })

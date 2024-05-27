@@ -2,8 +2,8 @@
   "name": "superb-ui",
   "private": true,
   "scripts": {
-    "start": "dotnet tool restore && dotnet fable watch SuperbUi --runFast vite",
-    "build": "dotnet tool restore && dotnet fable SuperbUi --run vite build",
+    "start": "dotnet tool restore && dotnet fable watch src/SuperbUi --runFast vite",
+    "build": "dotnet tool restore && dotnet fable src/SuperbUi --run vite build",
     "clean": "dotnet fable clean . --yes"
   },
   "dependencies": {

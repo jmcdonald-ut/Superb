@@ -143,4 +143,5 @@ paket-files/
 .env*
 !.env.sample
 
-SuperbUi/src/SuperbUi
+src/SuperbUi/dist/*
+!src/SuperbUi/dist/.gitkeep

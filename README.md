@@ -47,19 +47,19 @@ Instructions written on a machine running macOS 14.5.
 
 Superb is broken into four projects.
 
-1. **SuperbApp** (`SuperbApp/SuperbApp.fsproj`)
+1. **SuperbApp** (`src/SuperbApp/SuperbApp.fsproj`)
    - Brain of Superb.
    - Provides primary types, data, and business logic.
    - No dependencies on other projects.
-2. **SuperbApi** (`SuperbApi/SuperbApi.fsproj`)
+2. **SuperbApi** (`src/SuperbApi/SuperbApi.fsproj`)
    - Server/API for Superb.
    - Provides a GraphQL endpoint.
    - Depends on `SuperbApp`.
-3. **SuperbGraphQL** (`SuperbGraphQL/SuperbGraphQL.fsproj`)
+3. **SuperbGraphQL** (`src/SuperbGraphQL/SuperbGraphQL.fsproj`)
    - Queries, mutations, and types for GraphQL consumption on the frontend.
    - Besides `.graphql` queries and mutations, the code  in this project is mostly generated.
    - No dependencies on other projects.
-3. **SuperbUi** (`SuperbUi/SuperbUi.fsproj`)
+3. **SuperbUi** (`src/SuperbUi/SuperbUi.fsproj`)
    - Frontend UI for Superb.
    - React application, powered by Feliz and Fable.
    - Depends on `SuperbGraphQL`. Implicitly depends on `SuperbApp` and `SuperbApi`.
@@ -79,7 +79,7 @@ The server and frontend run separately. Run the server app in "watch" mode so fi
 #
 # - HTTP URL: http://localhost:5130
 # - HTTPS URL: https://localhost:7011
-dotnet watch --project SuperbApi/SuperbApi.fsproj --launch-profile https
+dotnet watch --project src/SuperbApi/SuperbApi.fsproj --launch-profile https
 
 # ## Running the frontend
 #

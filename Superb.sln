@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuperbApi", "SuperbApi\SuperbApi.fsproj", "{65539B1B-27CD-423A-A181-2D715B515277}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuperbApi", "src\SuperbApi\SuperbApi.fsproj", "{65539B1B-27CD-423A-A181-2D715B515277}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuperbUi", "SuperbUi\SuperbUi.fsproj", "{C44B5C7A-58BD-47BA-A96F-0E724E7DE8EA}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuperbUi", "src\SuperbUi\SuperbUi.fsproj", "{C44B5C7A-58BD-47BA-A96F-0E724E7DE8EA}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuperbApp", "SuperbApp\SuperbApp.fsproj", "{D460B446-B809-4735-9D2F-531870FDD6EB}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuperbApp", "src\SuperbApp\SuperbApp.fsproj", "{D460B446-B809-4735-9D2F-531870FDD6EB}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuperbGraphQL", "SuperbGraphQL\SuperbGraphQL.fsproj", "{2944D5B2-F6AC-4F0C-A784-6587F76936C4}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "SuperbGraphQL", "src\SuperbGraphQL\SuperbGraphQL.fsproj", "{2944D5B2-F6AC-4F0C-A784-6587F76936C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
