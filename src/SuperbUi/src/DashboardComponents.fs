@@ -1,6 +1,7 @@
 namespace SuperbUi
 
 open Feliz
+open Feliz.DaisyUI
 
 type DashboardComponents() =
   /// <summary>
@@ -8,9 +9,9 @@ type DashboardComponents() =
   /// </summary>
   [<ReactComponent>]
   static member DashboardModule(moduleName: string, title: string, children: ReactElement seq) =
-    Html.section [
-      prop.className moduleName
-      prop.children [ Html.h3 title; Html.div children ]
+    Daisy.card [
+      card.bordered
+      prop.children [ Daisy.cardBody [ Daisy.cardTitle title; Html.div children ] ]
     ]
 
   /// <summary>
@@ -20,11 +21,15 @@ type DashboardComponents() =
   static member TcpRow(tcpListener: GraphQLClient.TcpListener) =
     let toLi (host: string) = Html.li host
 
+    // Yeah
     Html.tr [
-      Html.td tcpListener.processId
-      Html.td tcpListener.user
-      Html.td tcpListener.command
-      Html.td [ Html.ul (Seq.map toLi tcpListener.hosts) ]
+      prop.className "align-top"
+      prop.children [
+        Html.td [ prop.className "align-top"; prop.text tcpListener.processId ]
+        Html.td [ prop.className "align-top"; prop.text tcpListener.user ]
+        Html.td [ prop.className "align-top"; prop.text tcpListener.command ]
+        Html.td [ prop.className "align-top"; prop.children [ Html.ul (Seq.map toLi tcpListener.hosts) ] ]
+      ]
     ]
 
   /// <summary>
@@ -39,7 +44,7 @@ type DashboardComponents() =
       moduleName = "tcp-listeners",
       title = "TCP Listeners",
       children = [
-        Html.table [
+        Daisy.table [
           Html.thead [
             Html.tr [ Html.th "Process"; Html.th "User"; Html.th "Command"; Html.th "Hosts" ]
           ]

@@ -1,6 +1,7 @@
 namespace SuperbUi
 
 open Feliz
+open Feliz.DaisyUI
 
 type Containers =
   /// <summary>
@@ -20,4 +21,8 @@ type Containers =
 
     React.useEffect (getTcpListeners >> Async.StartImmediate, [||])
 
-    Html.div [ DashboardComponents.TcpListeners(tcpListeners = tcpListeners) ]
+    Html.div [
+      theme.nord
+      prop.className "container mx-auto grid grid-cols-2 py-4"
+      prop.children [ DashboardComponents.TcpListeners(tcpListeners = tcpListeners) ]
+    ]

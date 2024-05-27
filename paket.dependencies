@@ -2,6 +2,7 @@ source https://api.nuget.org/v3/index.json
 
 storage: none
 nuget Feliz
+nuget Feliz.DaisyUI
 nuget Feliz.Router
 nuget FSharp.Core
 nuget HotChocolate.AspNetCore
