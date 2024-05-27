@@ -55,3 +55,51 @@ type DashboardComponents() =
         ]
       ]
     )
+
+  /// <summary>
+  /// Presents a single Hacker News story as a table row.
+  /// </summary>
+  [<ReactComponent>]
+  static member HackerNewsStoryRow(story: GraphQLClient.HackerNewsStory) =
+    let userUrl (userId: string) =
+      sprintf "https://news.ycombinator.com/user?id=%s" userId
+
+    let commentsUrl (storyId: int) =
+      sprintf "https://news.ycombinator.com/item?id=%d" storyId
+
+    // Yeah
+    Html.tr [
+      prop.className "align-top"
+      prop.children [
+        Html.td [ Html.a [ prop.href story.url; prop.target "_blank"; prop.text story.title ] ]
+        Html.td [
+          Html.a [ prop.href (userUrl story.by); prop.target "_blank"; prop.text story.by ]
+        ]
+        Html.td [
+          Html.a [
+            prop.href (commentsUrl story.storyId)
+            prop.target "_blank"
+            prop.text (List.length story.comments)
+          ]
+        ]
+      ]
+    ]
+
+  /// <summary>
+  /// Presents top Hacker News stories.
+  /// </summary>
+  [<ReactComponent>]
+  static member TopHackerNewsStories(hackerNewsStories: GraphQLClient.HackerNewsStory seq) =
+    let toHackerNewsStoryRow (story: GraphQLClient.HackerNewsStory) =
+      DashboardComponents.HackerNewsStoryRow(story = story)
+
+    DashboardComponents.DashboardModule(
+      moduleName = "hn-stories",
+      title = "Hacker News",
+      children = [
+        Daisy.table [
+          Html.thead [ Html.tr [ Html.th "Title"; Html.th "Author"; Html.th "Comments" ] ]
+          Html.tbody (Seq.map toHackerNewsStoryRow hackerNewsStories)
+        ]
+      ]
+    )

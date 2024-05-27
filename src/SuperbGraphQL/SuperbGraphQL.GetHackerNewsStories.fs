@@ -2,6 +2,7 @@
 module rec SuperbGraphQL.GetHackerNewsStories
 
 type Story = {
+  storyId: int
   by: Option<string>
   comments: Option<list<int>>
   title: Option<string>

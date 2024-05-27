@@ -1,5 +1,6 @@
 query GetHackerNewsStories {
   hackerNewsStories {
+    storyId
     by
     comments
     title

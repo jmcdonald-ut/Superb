@@ -3,12 +3,14 @@ namespace SuperbApp
 open FSharp.Data
 
 module News =
+  type Id = int
   type Author = string
   type Url = string
   type Title = string
   type Kids = int array
 
   type Story = {
+    StoryId: Id
     By: Author
     Url: Url
     Title: Title
@@ -34,10 +36,11 @@ module News =
   type ItemProvider = JsonProvider<itemSample, SampleIsList=true>
   type RawItem = ItemProvider.Root
 
-  let private intoListOfNormalizedStories (stories: Story list) (item: ItemProvider.Root) =
+  let private intoListOfNormalizedStories (item: ItemProvider.Root) (stories: Story list) =
     match (item.Type, item.By, item.Title, item.Url) with
     | ("story", Some(by), Some(title), Some(url)) ->
       let story: Story = {
+        Story.StoryId = item.Id
         Story.By = by
         Story.Title = title
         Story.Url = url
@@ -61,5 +64,5 @@ module News =
       let! (topStoryIds: int array) = TopStoryIds.AsyncLoad(topStoryIdsUrl)
       let! (stories: RawItem array) = topStoryIds |> Array.take 50 |> Array.map loadOne |> Async.Parallel
 
-      return Array.fold intoListOfNormalizedStories [] stories
+      return Array.foldBack intoListOfNormalizedStories stories []
     }

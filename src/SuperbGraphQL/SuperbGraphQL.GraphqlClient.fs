@@ -54,6 +54,7 @@ type SuperbGraphQLGraphqlClient(url: string, headers: Header list) =
         """
                 query GetHackerNewsStories {
                   hackerNewsStories {
+                    storyId
                     by
                     comments
                     title
