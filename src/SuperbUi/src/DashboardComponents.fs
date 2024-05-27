@@ -28,7 +28,10 @@ type DashboardComponents() =
         Html.td [ prop.className "align-top"; prop.text tcpListener.processId ]
         Html.td [ prop.className "align-top"; prop.text tcpListener.user ]
         Html.td [ prop.className "align-top"; prop.text tcpListener.command ]
-        Html.td [ prop.className "align-top"; prop.children [ Html.ul (Seq.map toLi tcpListener.hosts) ] ]
+        Html.td [
+          prop.className "align-top"
+          prop.children [ Html.ul (Seq.map toLi tcpListener.hosts) ]
+        ]
       ]
     ]
 

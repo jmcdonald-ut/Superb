@@ -5,3 +5,6 @@ type Query() =
     match TcpListeners.all () with
     | Ok list -> list |> List.toArray
     | Error _ -> [||]
+
+  member this.GetHackerNewsStories() =
+    Async.RunSynchronously(News.loadTopStories ())

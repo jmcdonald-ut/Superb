@@ -5,6 +5,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="News.fs" />
     <Compile Include="Schemata.fs" />
     <Compile Include="Processes.fs" />
     <Compile Include="TcpListeners.fs" />

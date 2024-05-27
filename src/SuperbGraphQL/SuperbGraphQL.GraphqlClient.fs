@@ -47,3 +47,36 @@ type SuperbGraphQLGraphqlClient(url: string, headers: Header list) =
         let response = Json.parseNativeAs<GraphqlErrorResponse> response.responseText
         return Error response.errors
     }
+
+  member _.GetHackerNewsStories() =
+    async {
+      let query =
+        """
+                query GetHackerNewsStories {
+                  hackerNewsStories {
+                    by
+                    comments
+                    title
+                    url
+                  }
+                }
+            """
+
+      let! response =
+        Http.request url
+        |> Http.method POST
+        |> Http.headers [ Headers.contentType "application/json"; yield! headers ]
+        |> Http.content (BodyContent.Text(Json.serialize { query = query; variables = None }))
+        |> Http.send
+
+      match response.statusCode with
+      | 200 ->
+        let response =
+          Json.parseNativeAs<GraphqlSuccessResponse<GetHackerNewsStories.Query>> response.responseText
+
+        return Ok response.data
+
+      | errorStatus ->
+        let response = Json.parseNativeAs<GraphqlErrorResponse> response.responseText
+        return Error response.errors
+    }
