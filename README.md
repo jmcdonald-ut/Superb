@@ -70,6 +70,12 @@ Superb is broken into four projects.
 
 #### Run
 
+Prior to running, be sure to build the latest/greatest GraphQL artifacts.
+
+```sh
+dotnet snowflaqe --generate
+```
+
 The server and frontend run separately. Run the server app in "watch" mode so file changes automatically trigger a recompile. **PRO TIP:** Visit https://localhost:7011/graphql to explore the GraphQL schema.
 
 ```sh

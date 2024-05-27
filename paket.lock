@@ -50,6 +50,41 @@ NUGET
       Feliz (>= 2.3) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
     FSharp.Core (8.0.300)
+    FSharp.Data (6.4)
+      FSharp.Core (>= 6.0.1) - restriction: >= netstandard2.0
+      FSharp.Data.Csv.Core (>= 6.4) - restriction: >= netstandard2.0
+      FSharp.Data.Html.Core (>= 6.4) - restriction: >= netstandard2.0
+      FSharp.Data.Http (>= 6.4) - restriction: >= netstandard2.0
+      FSharp.Data.Json.Core (>= 6.4) - restriction: >= netstandard2.0
+      FSharp.Data.Runtime.Utilities (>= 6.4) - restriction: >= netstandard2.0
+      FSharp.Data.WorldBank.Core (>= 6.4) - restriction: >= netstandard2.0
+      FSharp.Data.Xml.Core (>= 6.4) - restriction: >= netstandard2.0
+    FSharp.Data.Csv.Core (6.4) - restriction: >= netstandard2.0
+      FSharp.Core (>= 6.0.1) - restriction: >= netstandard2.0
+      FSharp.Data.Runtime.Utilities (>= 6.4) - restriction: >= netstandard2.0
+    FSharp.Data.Html.Core (6.4) - restriction: >= netstandard2.0
+      FSharp.Core (>= 6.0.1) - restriction: >= netstandard2.0
+      FSharp.Data.Csv.Core (>= 6.4) - restriction: >= netstandard2.0
+      FSharp.Data.Runtime.Utilities (>= 6.4) - restriction: >= netstandard2.0
+    FSharp.Data.Http (6.4) - restriction: >= netstandard2.0
+      FSharp.Core (>= 6.0.1) - restriction: >= netstandard2.0
+    FSharp.Data.Json.Core (6.4) - restriction: >= netstandard2.0
+      FSharp.Core (>= 6.0.1) - restriction: >= netstandard2.0
+      FSharp.Data.Http (>= 6.4) - restriction: >= netstandard2.0
+      FSharp.Data.Runtime.Utilities (>= 6.4) - restriction: >= netstandard2.0
+    FSharp.Data.Runtime.Utilities (6.4) - restriction: >= netstandard2.0
+      FSharp.Core (>= 6.0.1) - restriction: >= netstandard2.0
+      FSharp.Data.Http (>= 6.4) - restriction: >= netstandard2.0
+    FSharp.Data.WorldBank.Core (6.4) - restriction: >= netstandard2.0
+      FSharp.Core (>= 6.0.1) - restriction: >= netstandard2.0
+      FSharp.Data.Http (>= 6.4) - restriction: >= netstandard2.0
+      FSharp.Data.Json.Core (>= 6.4) - restriction: >= netstandard2.0
+      FSharp.Data.Runtime.Utilities (>= 6.4) - restriction: >= netstandard2.0
+    FSharp.Data.Xml.Core (6.4) - restriction: >= netstandard2.0
+      FSharp.Core (>= 6.0.1) - restriction: >= netstandard2.0
+      FSharp.Data.Http (>= 6.4) - restriction: >= netstandard2.0
+      FSharp.Data.Json.Core (>= 6.4) - restriction: >= netstandard2.0
+      FSharp.Data.Runtime.Utilities (>= 6.4) - restriction: >= netstandard2.0
     GreenDonut (13.9.4) - restriction: >= net6.0
       Microsoft.Extensions.ObjectPool (>= 6.0) - restriction: || (&& (>= net6.0) (< net7.0)) (&& (< net6.0) (>= netstandard2.0))
       Microsoft.Extensions.ObjectPool (>= 7.0) - restriction: && (>= net7.0) (< net8.0)

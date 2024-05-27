@@ -5,4 +5,5 @@ nuget Feliz
 nuget Feliz.DaisyUI
 nuget Feliz.Router
 nuget FSharp.Core
+nuget FSharp.Data 6.4.0
 nuget HotChocolate.AspNetCore
