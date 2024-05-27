@@ -10,6 +10,8 @@ Is full stack F# superb?
    - [Run](#run)
    - [Format](#format)
    - [Analyze](#analyze)
+   - [Audit](#audit)
+   - [Test](#test)
 
 ## Set Up
 
@@ -66,7 +68,7 @@ Superb is broken into four projects.
 
 ## Develop
 
-### Run
+#### Run
 
 The server and frontend run separately. Run the server app in "watch" mode so file changes automatically trigger a recompile. **PRO TIP:** Visit https://localhost:7011/graphql to explore the GraphQL schema.
 
@@ -89,7 +91,7 @@ dotnet watch --project src/SuperbApi/SuperbApi.fsproj --launch-profile https
 yarn start
 ```
 
-### Format
+#### Format
 
 Format F# code with [Fantomas](https://fsprojects.github.io/fantomas/). There are editor integrations available to streamline this.
 
@@ -97,10 +99,26 @@ Format F# code with [Fantomas](https://fsprojects.github.io/fantomas/). There ar
 dotnet fantomas **/*.fs
 ```
 
-### Analyze
+#### Analyze
 
 Fantomas does a great job formatting code automatically, but it doesn't cover more nuanced style issues. [FSharpLint](https://fsprojects.github.io/FSharpLint/) helps in this arena.
 
 ```sh
 dotnet fsharplint lint Superb.sln
+```
+
+#### Audit
+
+.NET dependencies are managed with Paket, and sourced from NuGet. Restoring/installing packages automatically scans for known vulnerabilities, and if any are found, reports them. The article [Auditing package dependencies for security vulnerabilities](https://learn.microsoft.com/en-us/nuget/concepts/auditing-packages) covers this in more detail.
+
+JS packages can be audited with:
+
+```sh
+yarn npm audit
+```
+
+#### Test
+
+```sh
+dotnet test
 ```
