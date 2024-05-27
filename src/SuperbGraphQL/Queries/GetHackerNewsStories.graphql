@@ -3,6 +3,7 @@ query GetHackerNewsStories {
     storyId
     by
     comments
+    commentCount
     title
     url
   }

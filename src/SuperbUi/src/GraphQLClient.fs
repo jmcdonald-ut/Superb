@@ -10,6 +10,7 @@ module GraphQLClient =
     url: string
     title: string
     comments: int list
+    commentCount: int
   }
 
   type TcpListener = {
@@ -44,6 +45,7 @@ module GraphQLClient =
         title = fromOptionOrEmptyString story.title
         url = fromOptionOrEmptyString story.url
         comments = fromOptionOrEmptyList story.comments
+        commentCount = story.commentCount
       }
 
       let intoNewListIfSome (story: GetHackerNewsStories.Story option) (newList: HackerNewsStory list) =

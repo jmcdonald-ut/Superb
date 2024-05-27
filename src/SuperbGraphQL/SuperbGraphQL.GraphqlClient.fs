@@ -57,6 +57,7 @@ type SuperbGraphQLGraphqlClient(url: string, headers: Header list) =
                     storyId
                     by
                     comments
+                    commentCount
                     title
                     url
                   }

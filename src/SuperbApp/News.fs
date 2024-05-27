@@ -15,6 +15,7 @@ module News =
     Url: Url
     Title: Title
     Comments: Kids
+    CommentCount: int
   }
 
   [<Literal>]
@@ -45,12 +46,14 @@ module News =
         Story.Title = title
         Story.Url = url
         Story.Comments = item.Kids
+        Story.CommentCount = Option.defaultValue 0 item.Descendants
       }
 
       story :: stories
     | _ -> stories
 
-  let private foldNormalizedStories (rawItems: RawItem array) = List.fold
+  let private makeItemUrl (id: int) =
+    sprintf "https://hacker-news.firebaseio.com/v0/item/%d.json" id
 
   /// <summary>
   /// Loads the top stories from Hacker News.
@@ -58,8 +61,7 @@ module News =
   let loadTopStories () =
     async {
       let loadOne (id: int) =
-        let uri: string = sprintf "https://hacker-news.firebaseio.com/v0/item/%d.json" id
-        ItemProvider.AsyncLoad(uri = uri)
+        ItemProvider.AsyncLoad(uri = (makeItemUrl id))
 
       let! (topStoryIds: int array) = TopStoryIds.AsyncLoad(topStoryIdsUrl)
       let! (stories: RawItem array) = topStoryIds |> Array.take 50 |> Array.map loadOne |> Async.Parallel

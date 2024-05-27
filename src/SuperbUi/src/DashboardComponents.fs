@@ -14,6 +14,10 @@ type DashboardComponents() =
       prop.children [ Daisy.cardBody [ Daisy.cardTitle title; Html.div children ] ]
     ]
 
+  [<ReactComponent>]
+  static member ExternalLink(href: string, text: string) =
+    Html.a [ prop.href href; prop.target "_blank"; prop.text text ]
+
   /// <summary>
   /// Presents a single TCP listener as a table row.
   /// </summary>
@@ -71,16 +75,10 @@ type DashboardComponents() =
     Html.tr [
       prop.className "align-top"
       prop.children [
-        Html.td [ Html.a [ prop.href story.url; prop.target "_blank"; prop.text story.title ] ]
+        Html.td [ DashboardComponents.ExternalLink(href = story.url, text = story.title) ]
+        Html.td [ DashboardComponents.ExternalLink(href = (userUrl story.by), text = story.by) ]
         Html.td [
-          Html.a [ prop.href (userUrl story.by); prop.target "_blank"; prop.text story.by ]
-        ]
-        Html.td [
-          Html.a [
-            prop.href (commentsUrl story.storyId)
-            prop.target "_blank"
-            prop.text (List.length story.comments)
-          ]
+          DashboardComponents.ExternalLink(href = (commentsUrl story.storyId), text = story.commentCount.ToString())
         ]
       ]
     ]

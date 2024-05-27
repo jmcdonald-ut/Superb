@@ -5,6 +5,7 @@ type Story = {
   storyId: int
   by: Option<string>
   comments: Option<list<int>>
+  commentCount: int
   title: Option<string>
   url: Option<string>
 }
