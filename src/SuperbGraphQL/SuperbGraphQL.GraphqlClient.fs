@@ -82,3 +82,38 @@ type SuperbGraphQLGraphqlClient(url: string, headers: Header list) =
         let response = Json.parseNativeAs<GraphqlErrorResponse> response.responseText
         return Error response.errors
     }
+
+  member _.ExecuteRedisCLICommand(input: ExecuteRedisCLICommand.InputVariables) =
+    async {
+      let query =
+        """
+                mutation ExecuteRedisCLICommand($command: String) {
+                  executeRedisCLICommand(command: $command)
+                }
+            """
+
+      let! response =
+        Http.request url
+        |> Http.method POST
+        |> Http.headers [ Headers.contentType "application/json"; yield! headers ]
+        |> Http.content (
+          BodyContent.Text(
+            Json.serialize {
+              query = query
+              variables = Some input
+            }
+          )
+        )
+        |> Http.send
+
+      match response.statusCode with
+      | 200 ->
+        let response =
+          Json.parseNativeAs<GraphqlSuccessResponse<ExecuteRedisCLICommand.Query>> response.responseText
+
+        return Ok response.data
+
+      | errorStatus ->
+        let response = Json.parseNativeAs<GraphqlErrorResponse> response.responseText
+        return Error response.errors
+    }

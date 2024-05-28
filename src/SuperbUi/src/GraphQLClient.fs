@@ -79,3 +79,13 @@ module GraphQLClient =
       | Ok { tcpListeners = None } -> return Ok []
       | Error reason -> return Error reason
     }
+
+  let executeRedisCLICommand (command: string) =
+    async {
+      let input: ExecuteRedisCLICommand.InputVariables = { command = Some command }
+
+      match! client.ExecuteRedisCLICommand(input) with
+      | Ok { executeRedisCLICommand = Some(thing) } -> return Ok thing
+      | Ok { executeRedisCLICommand = None } -> return Error "no response"
+      | Error reason -> return Error(sprintf "%A" reason)
+    }

@@ -3,6 +3,12 @@ namespace SuperbUi
 open Feliz
 open Feliz.DaisyUI
 
+type RedisInputOutput = {
+  didFail: bool
+  input: string
+  output: string
+}
+
 type DashboardComponents() =
   /// <summary>
   /// Renders a standalone dashboard module.
@@ -90,6 +96,68 @@ type DashboardComponents() =
         Daisy.table [
           Html.thead [ Html.tr [ Html.th "Title"; Html.th "Author"; Html.th "Comments" ] ]
           Html.tbody (Seq.map toHackerNewsStoryRow hackerNewsStories)
+        ]
+      ]
+    )
+
+  static member RedisInputOutputEntry(inputOutput: RedisInputOutput) =
+    let outputClass =
+      if inputOutput.didFail then
+        "bg-error text-error-content"
+      else
+        ""
+
+    React.fragment [
+      Html.pre [
+        prop.custom ("data-prefix", ">")
+        prop.className outputClass
+        prop.text inputOutput.output
+      ]
+      Html.pre [ prop.custom ("data-prefix", "$"); prop.text inputOutput.input ]
+    ]
+
+  /// <summary>
+  /// Redis CLI because why not?
+  /// </summary>
+  [<ReactComponent>]
+  static member RedisCli(commands: RedisInputOutput seq, onSubmitRedisCLICommand) =
+    let (value, setValue) = React.useState ("")
+
+    let nested =
+      commands |> Seq.map DashboardComponents.RedisInputOutputEntry |> Seq.toList
+
+    let textInput =
+      Html.pre [
+        prop.custom ("data-prefix", "$")
+        prop.children [
+          Html.form [
+            prop.className "inline"
+            prop.onSubmit (fun ev ->
+              ev.preventDefault () |> ignore
+              ev.stopPropagation () |> ignore
+              setValue ""
+              onSubmitRedisCLICommand value)
+            prop.children [
+              Daisy.input [
+                input.ghost
+                prop.type'.text
+                prop.className "inline border-none py-0 px-0 h-auto"
+                prop.onTextChange setValue
+                prop.value value
+                prop.placeholder "Type Command"
+              ]
+            ]
+          ]
+        ]
+      ]
+
+    DashboardComponents.DashboardModule(
+      moduleName = "redis-cli",
+      title = "Redis CLI",
+      children = [
+        Daisy.mockupCode [
+          Html.div [ prop.className "flex flex-col-reverse"; prop.children nested ]
+          textInput
         ]
       ]
     )

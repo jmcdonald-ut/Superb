@@ -23,7 +23,11 @@ module Server =
 
     builder.Services.AddControllers()
     builder.Services.AddScoped<Query>()
-    builder.Services.AddGraphQLServer().AddQueryType<Query>()
+
+    builder.Services
+      .AddGraphQLServer()
+      .AddQueryType<Query>()
+      .AddMutationType<Mutation>()
 
     let app = builder.Build()
 

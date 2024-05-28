@@ -8,6 +8,7 @@
     <Compile Include="News.fs" />
     <Compile Include="Schemata.fs" />
     <Compile Include="Processes.fs" />
+    <Compile Include="RedisCLI.fs" />
     <Compile Include="TcpListeners.fs" />
     <Compile Include="SuperbApp.fs" />
   </ItemGroup>
