@@ -6,7 +6,7 @@ type Query() =
     | Ok list -> list |> List.map Schemata.TcpListenerType |> List.toArray
     | Error _ -> [||]
 
-  member _.GetHackerNewsStories() =
+  member _.GetHackerNewsStories() : Schemata.StoryType array =
     Async.RunSynchronously(News.loadTopStories ())
 
 type Mutation() =

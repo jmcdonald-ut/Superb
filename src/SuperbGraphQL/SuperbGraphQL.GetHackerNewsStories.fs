@@ -1,15 +1,15 @@
 [<RequireQualifiedAccess>]
 module rec SuperbGraphQL.GetHackerNewsStories
 
-type Story = {
+type StoryType = {
   storyId: int
-  by: Option<string>
-  comments: Option<list<int>>
+  by: string
+  comments: list<int>
   commentCount: int
-  title: Option<string>
-  url: Option<string>
+  title: string
+  url: string
 }
 
 type Query = {
-  hackerNewsStories: Option<list<Option<Story>>>
+  hackerNewsStories: Option<list<Option<StoryType>>>
 }

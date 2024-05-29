@@ -23,41 +23,6 @@ module GraphQLClient =
     SuperbGraphQLGraphqlClient(url = "https://localhost:7011/graphql")
 
   /// <summary>
-  /// Fetches the top stories on Hacker News.
-  /// </summary>
-  /// <returns>
-  /// A successful result with normalized stories; otherwise an error result
-  /// with a list of errors.
-  /// </returns>
-  let getHackerNewsStories () =
-    async {
-      let fromOptionOrEmptyString = Option.defaultValue ""
-      let fromOptionOrEmptyList = Option.defaultValue []
-
-      let toHackerNewsStory (story: GetHackerNewsStories.Story) : HackerNewsStory = {
-        storyId = story.storyId
-        by = fromOptionOrEmptyString story.by
-        title = fromOptionOrEmptyString story.title
-        url = fromOptionOrEmptyString story.url
-        comments = fromOptionOrEmptyList story.comments
-        commentCount = story.commentCount
-      }
-
-      let intoNewListIfSome (story: GetHackerNewsStories.Story option) (newList: HackerNewsStory list) =
-        match story with
-        | Some gqlStory -> (toHackerNewsStory gqlStory) :: newList
-        | None -> newList
-
-      let foldIntoNormalizedList (stories: GetHackerNewsStories.Story option list) =
-        List.foldBack intoNewListIfSome stories []
-
-      match! client.GetHackerNewsStories() with
-      | Ok { hackerNewsStories = Some(stories) } -> return stories |> foldIntoNormalizedList |> Ok
-      | Ok _ -> return Ok []
-      | Error reason -> return Error reason
-    }
-
-  /// <summary>
   /// Fetches visible TCP listeners from the GraphQL endpoint and normalizes the
   /// result.
   /// </summary>
@@ -76,7 +41,7 @@ module GraphQLClient =
 
       match! client.GetTcpListeners() with
       | Ok { tcpListeners = Some(list) } -> return list |> foldIntoNormalizedList |> Ok
-      | Ok { tcpListeners = None } -> return Ok []
+      | Ok { tcpListeners = None } -> return Error [ { message = "Nothing" } ]
       | Error reason -> return Error reason
     }
 

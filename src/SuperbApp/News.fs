@@ -3,21 +3,6 @@ namespace SuperbApp
 open FSharp.Data
 
 module News =
-  type Id = int
-  type Author = string
-  type Url = string
-  type Title = string
-  type Kids = int array
-
-  type Story = {
-    StoryId: Id
-    By: Author
-    Url: Url
-    Title: Title
-    Comments: Kids
-    CommentCount: int
-  }
-
   [<Literal>]
   let topStoryIdsUrl: string = "https://hacker-news.firebaseio.com/v0/topstories.json"
 
@@ -37,19 +22,19 @@ module News =
   type ItemProvider = JsonProvider<itemSample, SampleIsList=true>
   type RawItem = ItemProvider.Root
 
-  let private intoListOfNormalizedStories (item: ItemProvider.Root) (stories: Story list) =
+  let private intoListOfNormalizedStories (item: ItemProvider.Root) (stories: Schemata.StoryType array) =
     match (item.Type, item.By, item.Title, item.Url) with
     | ("story", Some(by), Some(title), Some(url)) ->
-      let story: Story = {
-        Story.StoryId = item.Id
-        Story.By = by
-        Story.Title = title
-        Story.Url = url
-        Story.Comments = item.Kids
-        Story.CommentCount = Option.defaultValue 0 item.Descendants
+      let story: Schemata.Story = {
+        StoryId = item.Id
+        By = by
+        Title = title
+        Url = url
+        Comments = item.Kids
+        CommentCount = Option.defaultValue 0 item.Descendants
       }
 
-      story :: stories
+      Array.insertAt 0 (new Schemata.StoryType(story)) stories
     | _ -> stories
 
   let private makeItemUrl (id: int) =
@@ -66,5 +51,5 @@ module News =
       let! (topStoryIds: int array) = TopStoryIds.AsyncLoad(topStoryIdsUrl)
       let! (stories: RawItem array) = topStoryIds |> Array.take 50 |> Array.map loadOne |> Async.Parallel
 
-      return Array.foldBack intoListOfNormalizedStories stories []
+      return Array.foldBack intoListOfNormalizedStories stories [||]
     }

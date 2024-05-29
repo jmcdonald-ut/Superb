@@ -3,28 +3,34 @@ namespace SuperbUi
 open Feliz
 open Feliz.DaisyUI
 
-type RedisInputOutput = {
-  didFail: bool
-  input: string
-  output: string
-}
-
 type DashboardComponents() =
   /// <summary>
   /// Renders a standalone dashboard module.
   /// </summary>
   [<ReactComponent>]
-  static member DashboardModule(moduleName: string, title: string, children: ReactElement seq) =
+  static member DashboardModule
+    (moduleName: string, title: string, children: ReactElement seq, ?errors: SuperbGraphQL.ErrorType list)
+    =
+    let renderedErrors = Components.ErrorAlert(Option.defaultValue [] errors)
+
     Daisy.card [
       card.bordered
-      prop.children [ Daisy.cardBody [ Daisy.cardTitle title; Html.div children ] ]
+      prop.children [
+        Daisy.cardBody [
+          Daisy.cardTitle title
+          Html.div [
+            prop.className "flex flex-col gap-2"
+            prop.children (Seq.insertAt 0 renderedErrors children)
+          ]
+        ]
+      ]
     ]
 
   /// <summary>
   /// Presents a single TCP listener as a table row.
   /// </summary>
   [<ReactComponent>]
-  static member TcpRow(tcpListener: GraphQLClient.TcpListener) =
+  static member TcpRow(tcpListener: SuperbGraphQL.GetTcpListeners.TcpListenerType) =
     Html.tr [
       prop.className "align-top"
       prop.children [
@@ -42,8 +48,10 @@ type DashboardComponents() =
   /// Presents visible TCP listeners in a table.
   /// </summary>
   [<ReactComponent>]
-  static member TcpListeners(tcpListeners: GraphQLClient.TcpListener seq) =
-    let toTcpRow (tcpListener: GraphQLClient.TcpListener) =
+  static member TcpListeners() =
+    let tcpListenersState = Hooks.useTcpListener ()
+
+    let toTcpRow (tcpListener: SuperbGraphQL.GetTcpListeners.TcpListenerType) =
       DashboardComponents.TcpRow(tcpListener = tcpListener)
 
     DashboardComponents.DashboardModule(
@@ -54,16 +62,17 @@ type DashboardComponents() =
           Html.thead [
             Html.tr [ Html.th "Process"; Html.th "User"; Html.th "Command"; Html.th "Hosts" ]
           ]
-          Html.tbody (Seq.map toTcpRow tcpListeners)
+          Html.tbody (Seq.map toTcpRow tcpListenersState.data)
         ]
-      ]
+      ],
+      errors = tcpListenersState.errors
     )
 
   /// <summary>
   /// Presents a single Hacker News story as a table row.
   /// </summary>
   [<ReactComponent>]
-  static member HackerNewsStoryRow(story: GraphQLClient.HackerNewsStory) =
+  static member HackerNewsStoryRow(story: SuperbGraphQL.GetHackerNewsStories.StoryType) =
     let userUrl (userId: string) =
       sprintf "https://news.ycombinator.com/user?id=%s" userId
 
@@ -85,9 +94,8 @@ type DashboardComponents() =
   /// Presents top Hacker News stories.
   /// </summary>
   [<ReactComponent>]
-  static member TopHackerNewsStories(hackerNewsStories: GraphQLClient.HackerNewsStory seq) =
-    let toHackerNewsStoryRow (story: GraphQLClient.HackerNewsStory) =
-      DashboardComponents.HackerNewsStoryRow(story = story)
+  static member TopHackerNewsStories() =
+    let hackerNewsStoriesState = Hooks.useHackerNewsStories ()
 
     DashboardComponents.DashboardModule(
       moduleName = "hn-stories",
@@ -95,9 +103,10 @@ type DashboardComponents() =
       children = [
         Daisy.table [
           Html.thead [ Html.tr [ Html.th "Title"; Html.th "Author"; Html.th "Comments" ] ]
-          Html.tbody (Seq.map toHackerNewsStoryRow hackerNewsStories)
+          Html.tbody (Seq.map DashboardComponents.HackerNewsStoryRow hackerNewsStoriesState.data)
         ]
-      ]
+      ],
+      errors = hackerNewsStoriesState.errors
     )
 
   static member RedisInputOutputEntry(inputOutput: RedisInputOutput) =
@@ -120,11 +129,13 @@ type DashboardComponents() =
   /// Redis CLI because why not?
   /// </summary>
   [<ReactComponent>]
-  static member RedisCli(commands: RedisInputOutput seq, onSubmitRedisCLICommand) =
-    let (value, setValue) = React.useState ("")
+  static member RedisCLI() =
+    let redisCLIState = Hooks.useRedisCLI ()
 
     let nested =
-      commands |> Seq.map DashboardComponents.RedisInputOutputEntry |> Seq.toList
+      redisCLIState.executed
+      |> Seq.map DashboardComponents.RedisInputOutputEntry
+      |> Seq.toList
 
     let textInput =
       Html.pre [
@@ -135,15 +146,15 @@ type DashboardComponents() =
             prop.onSubmit (fun ev ->
               ev.preventDefault () |> ignore
               ev.stopPropagation () |> ignore
-              setValue ""
-              onSubmitRedisCLICommand value)
+              redisCLIState.executeRedisCLICommand ()
+              redisCLIState.setCommand "")
             prop.children [
               Daisy.input [
                 input.ghost
                 prop.type'.text
                 prop.className "inline border-none py-0 px-0 h-auto"
-                prop.onTextChange setValue
-                prop.value value
+                prop.onTextChange redisCLIState.setCommand
+                prop.value redisCLIState.command
                 prop.placeholder "Type Command"
               ]
             ]
@@ -159,5 +170,6 @@ type DashboardComponents() =
           Html.div [ prop.className "flex flex-col-reverse"; prop.children nested ]
           textInput
         ]
-      ]
+      ],
+      errors = redisCLIState.errors
     )
