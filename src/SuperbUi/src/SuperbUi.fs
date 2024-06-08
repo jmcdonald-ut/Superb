@@ -1,9 +1,11 @@
 ﻿namespace SuperbUi
 
+open Browser.Dom
 open Feliz
 open Feliz.Router
-open Browser.Dom
+
 open SuperbUi.Dashboard
+open SuperbUi.Experience
 
 module App =
   Fable.Core.JsInterop.importSideEffects "./styles.css"
@@ -17,8 +19,8 @@ module App =
       router.onUrlChanged updateUrl
       router.children [
         match currentUrl with
-        | [] -> Dashboard.DashboardContainer()
-        | _otherwise -> ErrorScreen.Container "That page doesn't seem to be found!"
+        | [] -> Dashboard.DashboardScreen()
+        | notFoundPath -> Experience.NotFoundErrorScreen notFoundPath
       ]
     ]
 

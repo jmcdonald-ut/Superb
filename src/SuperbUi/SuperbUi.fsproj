@@ -8,13 +8,13 @@
     <None Include="src/index.html" />
     <Compile Include="src/Hooks.fs" />
     <Compile Include="src/Components.fs" />
+    <Compile Include="src/Experience/Experience.fs" />
     <Compile Include="src/Dashboard/Components/DashboardModule.fs" />
     <Compile Include="src/Dashboard/Components/HackerNewsFeed.fs" />
     <Compile Include="src/Dashboard/Components/MySQLExplorer.fs" />
     <Compile Include="src/Dashboard/Components/RedisCLI.fs" />
     <Compile Include="src/Dashboard/Components/TcpListeners.fs" />
     <Compile Include="src/Dashboard/Dashboard.fs" />
-    <Compile Include="src/ErrorScreen.fs" />
     <Compile Include="src/Extensions.fs" />
     <Compile Include="src/SuperbUi.fs" />
   </ItemGroup>

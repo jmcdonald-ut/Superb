@@ -17,7 +17,7 @@ module Dashboard =
   /// A superb dashboard ;)
   /// </summary>
   [<ReactComponent>]
-  let DashboardContainer () =
+  let DashboardScreen () =
     Components.StandardLayout [
       Html.div [
         theme.nord
