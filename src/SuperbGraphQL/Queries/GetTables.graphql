@@ -1,0 +1,25 @@
+query getTables($schemaName: String!) {
+  tables(schemaName: $schemaName) {
+    autoIncrement
+    avgRowLength
+    checksum
+    checkTime
+    createOptions
+    createTime
+    dataFree
+    dataLength
+    engine
+    indexLength
+    maxDataLength
+    rowFormat
+    tableCatalog
+    tableCollation
+    tableComment
+    tableName
+    tableRows
+    tableSchema
+    tableType
+    updateTime
+    version
+  }
+}

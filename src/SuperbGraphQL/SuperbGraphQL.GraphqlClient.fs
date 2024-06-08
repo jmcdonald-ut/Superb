@@ -15,6 +15,63 @@ type SuperbGraphQLGraphqlClient(url: string, headers: Header list) =
   /// <param name="url">GraphQL endpoint URL</param>
   new(url: string) = SuperbGraphQLGraphqlClient(url, [])
 
+  member _.GetTables(input: GetTables.InputVariables) =
+    async {
+      let query =
+        """
+                query getTables($schemaName: String!) {
+                  tables(schemaName: $schemaName) {
+                    autoIncrement
+                    avgRowLength
+                    checksum
+                    checkTime
+                    createOptions
+                    createTime
+                    dataFree
+                    dataLength
+                    engine
+                    indexLength
+                    maxDataLength
+                    rowFormat
+                    tableCatalog
+                    tableCollation
+                    tableComment
+                    tableName
+                    tableRows
+                    tableSchema
+                    tableType
+                    updateTime
+                    version
+                  }
+                }
+            """
+
+      let! response =
+        Http.request url
+        |> Http.method POST
+        |> Http.headers [ Headers.contentType "application/json"; yield! headers ]
+        |> Http.content (
+          BodyContent.Text(
+            Json.serialize {
+              query = query
+              variables = Some input
+            }
+          )
+        )
+        |> Http.send
+
+      match response.statusCode with
+      | 200 ->
+        let response =
+          Json.parseNativeAs<GraphqlSuccessResponse<GetTables.Query>> response.responseText
+
+        return Ok response.data
+
+      | errorStatus ->
+        let response = Json.parseNativeAs<GraphqlErrorResponse> response.responseText
+        return Error response.errors
+    }
+
   member _.GetTcpListeners() =
     async {
       let query =
@@ -75,6 +132,40 @@ type SuperbGraphQLGraphqlClient(url: string, headers: Header list) =
       | 200 ->
         let response =
           Json.parseNativeAs<GraphqlSuccessResponse<GetHackerNewsStories.Query>> response.responseText
+
+        return Ok response.data
+
+      | errorStatus ->
+        let response = Json.parseNativeAs<GraphqlErrorResponse> response.responseText
+        return Error response.errors
+    }
+
+  member _.GetSchemata() =
+    async {
+      let query =
+        """
+                query getSchemata {
+                  schemata {
+                    catalogName
+                    defaultCharacterSetName
+                    defaultCollationName
+                    defaultEncryption
+                    schemaName
+                  }
+                }
+            """
+
+      let! response =
+        Http.request url
+        |> Http.method POST
+        |> Http.headers [ Headers.contentType "application/json"; yield! headers ]
+        |> Http.content (BodyContent.Text(Json.serialize { query = query; variables = None }))
+        |> Http.send
+
+      match response.statusCode with
+      | 200 ->
+        let response =
+          Json.parseNativeAs<GraphqlSuccessResponse<GetSchemata.Query>> response.responseText
 
         return Ok response.data
 

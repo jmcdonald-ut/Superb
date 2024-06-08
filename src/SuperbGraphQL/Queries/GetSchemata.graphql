@@ -1,0 +1,9 @@
+query getSchemata {
+  schemata {
+    catalogName
+    defaultCharacterSetName
+    defaultCollationName
+    defaultEncryption
+    schemaName
+  }
+}
