@@ -8,10 +8,13 @@ open SuperbApp.Schemata
 
 type Query() =
   member _.GetSchemata() =
-    MySQL.querySchemas |> Seq.map SchemaType |> Seq.toArray
+    MySQL.getListOfAllSchemas () |> Seq.map SchemaType |> Seq.toArray
 
   member _.GetTables([<GraphQLType(typeof<NonNullType<StringType>>)>] schemaName: string) =
-    schemaName |> MySQL.queryTables |> Seq.map TableType |> Seq.toArray
+    schemaName
+    |> MySQL.getListOfAllTablesInSchema
+    |> Seq.map TableType
+    |> Seq.toArray
 
   member _.GetTcpListeners() =
     match TcpListeners.all () with
