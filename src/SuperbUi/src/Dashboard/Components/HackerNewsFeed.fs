@@ -40,8 +40,11 @@ module HackerNewsFeed =
       title = "Hacker News"
       children = [
         Daisy.table [
-          Html.thead [ Html.tr [ Html.th "Title"; Html.th "Author"; Html.th "Comments" ] ]
-          Html.tbody (Seq.map HackerNewsStoryRow hackerNewsStoriesState.data)
+          prop.className "table-sm"
+          prop.children [
+            Html.thead [ Html.tr [ Html.th "Title"; Html.th "Author"; Html.th "Comments" ] ]
+            Html.tbody (Seq.map HackerNewsStoryRow hackerNewsStoriesState.data)
+          ]
         ]
       ]
       errors = hackerNewsStoriesState.errors

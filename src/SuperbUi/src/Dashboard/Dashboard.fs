@@ -25,11 +25,11 @@ module Dashboard =
         prop.children [
           Html.div [
             prop.className "flex flex-col gap-4"
-            prop.children [ Memoized.TcpListeners(); Memoized.RedisCLI() ]
+            prop.children [ Memoized.TcpListeners(); Memoized.TopHackerNewsStories() ]
           ]
           Html.div [
             prop.className "flex flex-col gap-4"
-            prop.children [ Memoized.MySQLExplorer(); Memoized.TopHackerNewsStories() ]
+            prop.children [ Memoized.MySQLExplorer(); Memoized.RedisCLI() ]
           ]
         ]
       ]

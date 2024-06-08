@@ -37,7 +37,12 @@ module TcpListeners =
     | Prefix "c" value -> { headListener with Command = value } :: rest
     | Prefix "L" value -> { headListener with User = value } :: rest
     | Prefix "n" value when not (List.contains value headListener.Hosts) ->
-      let nextHosts = value :: headListener.Hosts
+      let nextHosts =
+        if value.Contains("->") then
+          headListener.Hosts
+        else
+          value :: headListener.Hosts
+
       { headListener with Hosts = nextHosts } :: rest
     | _ -> list
 
@@ -45,7 +50,10 @@ module TcpListeners =
   // TcpListener records. Maps the value back into a Result type in order to
   // support proper usage with `Result.bind`.
   let private foldParsedIntoTcpListener (from: string list) =
-    from |> List.fold mapParsedIntoTcpListener [] |> Ok
+    from
+    |> List.fold mapParsedIntoTcpListener []
+    |> List.filter (fun listener -> listener.Hosts.Length > 0)
+    |> Ok
 
   /// <summary>
   /// Lists all visible TCP listeners bound to localhost.

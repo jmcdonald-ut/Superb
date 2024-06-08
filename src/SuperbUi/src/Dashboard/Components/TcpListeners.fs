@@ -36,10 +36,13 @@ module TcpListeners =
       title = "TCP Listeners"
       children = [
         Daisy.table [
-          Html.thead [
-            Html.tr [ Html.th "Process"; Html.th "User"; Html.th "Command"; Html.th "Hosts" ]
+          prop.className "table-sm"
+          prop.children [
+            Html.thead [
+              Html.tr [ Html.th "Process"; Html.th "User"; Html.th "Command"; Html.th "Hosts" ]
+            ]
+            Html.tbody (Seq.map TcpRow tcpListenersState.data)
           ]
-          Html.tbody (Seq.map TcpRow tcpListenersState.data)
         ]
       ]
       errors = tcpListenersState.errors

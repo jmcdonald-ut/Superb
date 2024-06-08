@@ -47,7 +47,8 @@ module RedisCLI =
               Daisy.input [
                 input.ghost
                 prop.type'.text
-                prop.className "inline border-none py-0 px-0 h-auto"
+                prop.className
+                  "inline bg-transparent focus:border-none focus:outline-none text-primary-content focus:text-primary-content border-none py-0 px-0 h-auto"
                 prop.onTextChange redisCLIState.setCommand
                 prop.value redisCLIState.command
                 prop.placeholder "Type Command"

@@ -1,6 +1,10 @@
 # Superb
 
-Is full stack F# superb?
+Is full stack F# superb? I'm still working that out.
+
+### 📸 Progress!
+
+[![screenshot of app](/doc/quick-preview-thumb.png?raw=true)](/doc/quick-preview.png)
 
 ## Table of Contents
 
