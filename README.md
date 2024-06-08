@@ -6,12 +6,23 @@ Is full stack F# superb?
 
 1. **[Set Up](#set-up)**
 2. **[Architecture](#architecture)**
-2. **[Develop](#develop)**
+3. **[Develop](#develop)**
+   - [Build](#build)
+      - API: `dotnet build` | `dotnet clean`
+      - Client: `yarn build` | `yarn clean`
+      - GraphQL: `dotnet snowflaqe --generate`
    - [Run](#run)
+      - API: `dotnet run --project src/SuperbApi/SuperbApi.fsproj --launch-profile https:watch`
+      - Client: `yarn start`
    - [Format](#format)
+      - API: `dotnet fantomas src/**/*.fs`
    - [Analyze](#analyze)
+      - API: `dotnet fsharplint lint Superb.sln`
    - [Audit](#audit)
+      - API: `dotnet paket ...` (auditing occurs w/ normal usage)
+      - Client: `yarn npm audit`
    - [Test](#test)
+      - API: `dotnet test`
 
 ## Set Up
 
@@ -68,63 +79,73 @@ Superb is broken into four projects.
 
 ## Develop
 
+#### Build
+
+- Build or clean app/API artifacts (as well as some client artifacts):
+
+  ```sh
+  dotnet build
+  dotnet clean
+  ```
+- Build or clean client artifacts (note that this also builds any necessary/missing client .NET artifacts):
+
+  ```sh
+  yarn build
+  yarn clean
+  ```
+- Generate GraphQL artifacts for the client:
+
+  ```sh
+  dotnet snowflaqe --generate
+  ```
+  - **NOTE:** This is necessary after updating the GraphQL schema or GraphQL operations.
+
+Building or cleaning the app/api/client is generally not necessary in development. However, both actions can be useful, as a troubleshooting step, if anything is failing to run. It is necessary to build GraphQL artifacts for the client after updating the GraphQL schema/operations.
+
 #### Run
 
-Prior to running, be sure to build the latest/greatest GraphQL artifacts.
+- App/API (automatically rebuilds when relevant code changes):
 
-```sh
-dotnet snowflaqe --generate
-```
+  ```sh
+  dotnet watch --project src/SuperbApi/SuperbApi.fsproj --launch-profile https
+  ```
+  - https://localhost:7011/graphql/ should open in the browser upon running this.
+- Client (also rebuilds when relevant code changes):
 
-The server and frontend run separately. Run the server app in "watch" mode so file changes automatically trigger a recompile. **PRO TIP:** Visit https://localhost:7011/graphql to explore the GraphQL schema.
-
-```sh
-# ## Running the server
-#
-# Omit `--launch-profile https` to run the app without
-# HTTPS. Swap `watch` with `run` to opt-out of triggering
-# recompilation when running the application.
-#
-# - HTTP URL: http://localhost:5130
-# - HTTPS URL: https://localhost:7011
-dotnet watch --project src/SuperbApi/SuperbApi.fsproj --launch-profile https
-
-# ## Running the frontend
-#
-# `dotnet` is used behind the scenes to compile
-# Felize/Fable. As noted earlier, this supports hot code
-# reloading out of the box.
-yarn start
-```
+  ```sh
+  yarn start
+  ```
+  - Once `vite` finishes any set up, press `o` to open http://localhost:5173/ in the browser.
 
 #### Format
 
-Format F# code with [Fantomas](https://fsprojects.github.io/fantomas/). There are editor integrations available to streamline this.
+- Format F# code with [Fantomas](https://fsprojects.github.io/fantomas/). There are editor integrations available to streamline this.
 
-```sh
-dotnet fantomas **/*.fs
-```
+  ```sh
+  dotnet fantomas **/*.fs
+  ```
 
 #### Analyze
 
-Fantomas does a great job formatting code automatically, but it doesn't cover more nuanced style issues. [FSharpLint](https://fsprojects.github.io/FSharpLint/) helps in this arena.
+- Fantomas does a great job formatting code automatically, but it doesn't cover more nuanced style issues. [FSharpLint](https://fsprojects.github.io/FSharpLint/) helps in this arena.
 
-```sh
-dotnet fsharplint lint Superb.sln
-```
+  ```sh
+  dotnet fsharplint lint Superb.sln
+  ```
 
 #### Audit
 
-.NET dependencies are managed with Paket, and sourced from NuGet. Restoring/installing packages automatically scans for known vulnerabilities, and if any are found, reports them. The article [Auditing package dependencies for security vulnerabilities](https://learn.microsoft.com/en-us/nuget/concepts/auditing-packages) covers this in more detail.
+- .NET dependencies are managed with Paket, and sourced from NuGet. Restoring/installing packages automatically scans for known vulnerabilities, and if any are found, reports them. The article [Auditing package dependencies for security vulnerabilities](https://learn.microsoft.com/en-us/nuget/concepts/auditing-packages) covers this in more detail.
+- JS packages can be audited with:
 
-JS packages can be audited with:
-
-```sh
-yarn npm audit
-```
+  ```sh
+  yarn npm audit
+  ```
 
 #### Test
 
-```sh
-dotnet test
-```
+- Run API tests:
+
+  ```sh
+  dotnet test
+  ```
