@@ -4,3 +4,4 @@ HotChocolate.Types
 MySql.Data
 SQLProvider
 FSharp.Data.LiteralProviders
+System.Data.SqlClient
