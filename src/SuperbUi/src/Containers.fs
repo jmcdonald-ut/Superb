@@ -4,6 +4,7 @@ open Feliz
 open Feliz.DaisyUI
 
 type Memoized =
+  static member Schemata = React.memo (DashboardComponents.Schemata)
   static member TopHackerNewsStories = React.memo (DashboardComponents.TopHackerNewsStories)
   static member TcpListeners = React.memo (DashboardComponents.TcpListeners)
   static member RedisCLI = React.memo (DashboardComponents.RedisCLI)
@@ -24,7 +25,7 @@ type Containers =
         ]
         Html.div [
           prop.className "flex flex-col gap-4"
-          prop.children [ Memoized.TopHackerNewsStories() ]
+          prop.children [ Memoized.Schemata(); Memoized.TopHackerNewsStories() ]
         ]
       ]
     ]
