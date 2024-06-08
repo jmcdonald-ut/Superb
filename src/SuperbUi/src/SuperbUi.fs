@@ -6,6 +6,7 @@ open Feliz.Router
 
 open SuperbUi.Dashboard
 open SuperbUi.Experience
+open SuperbUi.MySQLClient
 
 module App =
   Fable.Core.JsInterop.importSideEffects "./styles.css"
@@ -20,6 +21,7 @@ module App =
       router.children [
         match currentUrl with
         | [] -> Dashboard.DashboardScreen()
+        | [ "mysql" ] -> MySQLClient.SchemataScreen()
         | notFoundPath -> Experience.NotFoundErrorScreen notFoundPath
       ]
     ]

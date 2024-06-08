@@ -2,7 +2,7 @@ namespace SuperbUi.Dashboard.Components
 
 open Feliz
 open Feliz.DaisyUI
-open SuperbUi
+open SuperbUi.MySQLClient.Hooks
 
 [<RequireQualifiedAccess>]
 module MySQLExplorer =
@@ -33,7 +33,7 @@ module MySQLExplorer =
   /// </summary>
   [<ReactComponent>]
   let DashboardModule () =
-    let schemataState = Hooks.useSchemata ()
+    let (_, schemas, _, _) = useSchemata ()
     let (selectedSchema, setSchema) = React.useState ("")
 
     let renderSchemaRow =
@@ -54,22 +54,22 @@ module MySQLExplorer =
           prop.className "overflow-x-auto"
           prop.children [
             Daisy.table [
-              prop.className "table-auto overflow-scroll w-full table-sm"
+              prop.className "table-fixed overflow-scroll w-full table-sm"
               prop.children [
                 Html.thead [
                   Html.tr [
-                    Html.th "Schema"
-                    Html.th "Catalog"
-                    Html.th "Default Character Set"
-                    Html.th "Default Collation"
+                    Html.th [ prop.className "w-64"; prop.text "Schema" ]
+                    Html.th [ prop.className "w-24"; prop.text "Catalog" ]
+                    Html.th [ prop.className "w-40"; prop.text "Default Character Set" ]
+                    Html.th [ prop.className "w-52"; prop.text "Default Collation" ]
                     Html.th "Default Encryption"
                   ]
                 ]
-                Html.tbody (Seq.map renderSchemaRow schemataState.data)
+                Html.tbody (Seq.map renderSchemaRow schemas)
               ]
             ]
           ]
         ]
       ]
-      errors = schemataState.errors
+      errors = []
     }
