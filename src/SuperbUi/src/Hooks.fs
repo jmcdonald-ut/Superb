@@ -71,6 +71,18 @@ module Hooks =
     }
 
   [<Hook>]
+  let useSchemata () =
+    let loadSchemataAsync () =
+      async {
+        match! client.GetSchemata() with
+        | Ok { schemata = Some(list) } -> return list |> normalizeListOfOptions |> Ok
+        | Ok { schemata = None } -> return [] |> Ok
+        | Error reasons -> return reasons |> Error
+      }
+
+    useListFromServer loadSchemataAsync
+
+  [<Hook>]
   let useTcpListener () =
     let loadTcpListenersAsync () =
       async {

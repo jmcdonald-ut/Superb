@@ -6,7 +6,7 @@ open SuperbUi.Dashboard.Components
 open SuperbUi
 
 type private Memoized =
-  // static member Schemata = React.memo (DashboardComponents.Schemata)
+  static member MySQLExplorer = React.memo MySQLExplorer.DashboardModule
   static member TopHackerNewsStories = React.memo HackerNewsFeed.DashboardModule
   static member TcpListeners = React.memo TcpListeners.DashboardModule
   static member RedisCLI = React.memo RedisCLI.DashboardModule
@@ -29,7 +29,7 @@ module Dashboard =
           ]
           Html.div [
             prop.className "flex flex-col gap-4"
-            prop.children [ Memoized.TopHackerNewsStories() ]
+            prop.children [ Memoized.MySQLExplorer(); Memoized.TopHackerNewsStories() ]
           ]
         ]
       ]
