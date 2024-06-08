@@ -1,7 +1,7 @@
 namespace SuperbApp.Tests
 
 open NUnit.Framework
-open SuperbApp.Schemata
+open SuperbApp.Features
 
 module TestSchemata =
   [<SetUp>]

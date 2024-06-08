@@ -3,20 +3,26 @@
 open HotChocolate
 open HotChocolate.Types
 
+open SuperbApp.Features
+open SuperbApp.Schemata
+
 type Query() =
   member _.GetSchemata() =
-    Schemata.querySchemas |> Seq.map Schemata.SchemaType |> Seq.toArray
+    MySQL.querySchemas |> Seq.map SchemaType |> Seq.toArray
 
   member _.GetTables([<GraphQLType(typeof<NonNullType<StringType>>)>] schemaName: string) =
-    schemaName |> Schemata.queryTables |> Seq.map Schemata.TableType |> Seq.toArray
+    schemaName |> MySQL.queryTables |> Seq.map TableType |> Seq.toArray
 
   member _.GetTcpListeners() =
     match TcpListeners.all () with
-    | Ok list -> list |> List.map Schemata.TcpListenerType |> List.toArray
+    | Ok list -> list |> List.map TcpListenerType |> List.toArray
     | Error _ -> [||]
 
-  member _.GetHackerNewsStories() : Schemata.StoryType array =
-    Async.RunSynchronously(News.loadTopStories ())
+  member _.GetHackerNewsStories() : StoryType array =
+    News.loadTopStories ()
+    |> Async.RunSynchronously
+    |> List.map StoryType
+    |> List.toArray
 
 type Mutation() =
   member _.ExecuteRedisCLICommand(command: string) =

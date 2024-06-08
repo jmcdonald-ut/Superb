@@ -1,4 +1,4 @@
-namespace SuperbApp
+namespace SuperbApp.Helpers
 
 open System.Diagnostics
 

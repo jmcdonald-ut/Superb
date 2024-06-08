@@ -1,6 +1,21 @@
-namespace SuperbApp
+namespace SuperbApp.Features
 
 open FSharp.Data
+
+type private Id = int
+type private Author = string
+type private Url = string
+type private Title = string
+type private Kids = int array
+
+type Story = {
+  StoryId: Id
+  By: Author
+  Url: Url
+  Title: Title
+  Comments: Kids
+  CommentCount: int
+}
 
 module News =
   [<Literal>]
@@ -22,10 +37,10 @@ module News =
   type ItemProvider = JsonProvider<itemSample, SampleIsList=true>
   type RawItem = ItemProvider.Root
 
-  let private intoListOfNormalizedStories (item: ItemProvider.Root) (stories: Schemata.StoryType array) =
+  let private intoListOfNormalizedStories (item: ItemProvider.Root) (stories: Story list) =
     match (item.Type, item.By, item.Title, item.Url) with
     | ("story", Some(by), Some(title), Some(url)) ->
-      let story: Schemata.Story = {
+      let story: Story = {
         StoryId = item.Id
         By = by
         Title = title
@@ -34,7 +49,7 @@ module News =
         CommentCount = Option.defaultValue 0 item.Descendants
       }
 
-      Array.insertAt 0 (new Schemata.StoryType(story)) stories
+      story :: stories
     | _ -> stories
 
   let private makeItemUrl (id: int) =
@@ -51,5 +66,5 @@ module News =
       let! (topStoryIds: int array) = TopStoryIds.AsyncLoad(topStoryIdsUrl)
       let! (stories: RawItem array) = topStoryIds |> Array.take 50 |> Array.map loadOne |> Async.Parallel
 
-      return Array.foldBack intoListOfNormalizedStories stories [||]
+      return Array.foldBack intoListOfNormalizedStories stories []
     }

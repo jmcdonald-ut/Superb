@@ -1,6 +1,8 @@
-namespace SuperbApp
+namespace SuperbApp.Features
 
 open System
+
+open SuperbApp.Helpers
 
 module RedisCLI =
   // Reads all output of the executed command into a string.

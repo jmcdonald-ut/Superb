@@ -1,26 +1,11 @@
 namespace SuperbApp
 
-open FSharp.Data.LiteralProviders
-open FSharp.Data.Sql
 open HotChocolate
 open HotChocolate.Types
-open System.Linq
+
+open SuperbApp.Features
 
 module Schemata =
-  type TcpListener = {
-    ProcessId: string
-    Command: string
-    User: string
-    Hosts: string list
-  } with
-
-    static member Default = {
-      ProcessId = "<UNKNOWN>"
-      Command = "<UNKNOWN>"
-      User = "<UNKNOWN>"
-      Hosts = []
-    }
-
   type TcpListenerType(tcpListener: TcpListener) =
     [<GraphQLType(typeof<NonNullType<StringType>>)>]
     member _.ProcessId = tcpListener.ProcessId
@@ -33,21 +18,6 @@ module Schemata =
 
     [<GraphQLType(typeof<NonNullType<ListType<NonNullType<StringType>>>>)>]
     member _.Hosts = tcpListener.Hosts
-
-  type Id = int
-  type Author = string
-  type Url = string
-  type Title = string
-  type Kids = int array
-
-  type Story = {
-    StoryId: Id
-    By: Author
-    Url: Url
-    Title: Title
-    Comments: Kids
-    CommentCount: int
-  }
 
   type StoryType(story: Story) =
     member _.StoryId = story.StoryId
@@ -65,34 +35,7 @@ module Schemata =
     [<GraphQLType(typeof<NonNullType<StringType>>)>]
     member _.Title = story.Title
 
-  [<Literal>]
-  let connectionStr =
-    Env<"SUPERB_MYSQL_CONNECTION_STRING", "server=HOST;port=3306;uid=USER;pwd=PASSWORD;database=DB">.Value
-
-  [<Literal>]
-  let dbVendor = Common.DatabaseProviderTypes.MYSQL
-
-  type sql = SqlDataProvider<ConnectionString=connectionStr, DatabaseVendor=dbVendor>
-  type Table = sql.dataContext.``information_schema.TABLESEntity``
-  type Schema = sql.dataContext.``information_schema.SCHEMATAEntity``
-  let ctx = sql.GetDataContext()
-
-  let queryTables (schemaName: string) : IQueryable<Table> =
-    query {
-      for row in ctx.InformationSchema.Tables do
-        where (row.TableSchema = schemaName)
-        sortBy (row.TableName)
-        select row
-    }
-
-  let querySchemas =
-    query {
-      for row in ctx.InformationSchema.Schemata do
-        sortBy (row.SchemaName)
-        select row
-    }
-
-  type SchemaType(schema: Schema) =
+  type SchemaType(schema: MySQL.Schema) =
     [<GraphQLType(typeof<NonNullType<StringType>>)>]
     member _.CatalogName = schema.CatalogName
 
@@ -108,7 +51,7 @@ module Schemata =
     [<GraphQLType(typeof<NonNullType<StringType>>)>]
     member _.SchemaName = schema.SchemaName
 
-  type TableType(table: Table) =
+  type TableType(table: MySQL.Table) =
     [<GraphQLType(typeof<NonNullType<IntType>>)>]
     member _.AutoIncrement = table.AutoIncrement
 

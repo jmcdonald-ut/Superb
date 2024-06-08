@@ -1,8 +1,22 @@
-namespace SuperbApp
+namespace SuperbApp.Features
 
 open System
 
-open SuperbApp.Schemata
+open SuperbApp.Helpers
+
+type TcpListener = {
+  ProcessId: string
+  Command: string
+  User: string
+  Hosts: string list
+} with
+
+  static member Default = {
+    ProcessId = "<UNKNOWN>"
+    Command = "<UNKNOWN>"
+    User = "<UNKNOWN>"
+    Hosts = []
+  }
 
 module TcpListeners =
   // Reads all output of the executed command into a string.
