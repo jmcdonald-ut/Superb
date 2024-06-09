@@ -53,6 +53,7 @@ module MySQL =
   type private sql = SqlDataProvider<ConnectionString=connectionStr, DatabaseVendor=dbVendor>
   type Table = sql.dataContext.``information_schema.TABLESEntity``
   type Schema = sql.dataContext.``information_schema.SCHEMATAEntity``
+  type TableColumn = sql.dataContext.``information_schema.COLUMNSEntity``
   type RowFieldValue = { Key: string; Value: string }
   type Row = { Values: RowFieldValue list }
 
@@ -76,12 +77,19 @@ module MySQL =
     }
 
   /// Retrieves a single table scoped by schema and table name.
-  let oneTableByNameAndSchema (schemaName: string) (tableName: string) : Table =
+  let oneTableBySchemaAndTableNames (schemaName: string) (tableName: string) : Table =
     query {
       for table in allTablesQuery (schemaName) do
         where (table.TableName = tableName)
         select table
         headOrDefault
+    }
+
+  let allColumnsByTable (table: Table) : IQueryable<TableColumn> =
+    query {
+      for column in ctx.InformationSchema.Columns do
+        where (column.TableSchema = table.TableSchema && column.TableName = table.TableName)
+        select column
     }
 
   /// Retrieves a plain list of all schemas visible based on the configured
@@ -96,16 +104,18 @@ module MySQL =
   /// This function is provided for use from the client side (via GraphQL). The
   /// schema and table name ultimately come from there.
   let dangerouslyTakeTableRowsDynamically (takeCount: int) (schemaName: string) (tableName: string) =
-    // TODO: Error handling if this query has no result.
-    // TODO: Explicit ORDER BY with primary key. Primary key info is available
-    //   in information_schema.columns.
-    let targetTable = oneTableByNameAndSchema schemaName tableName
-    let queryString = sprintf "SELECT * FROM %s LIMIT @limit" targetTable.TableName
-
     // Since we're accepting schema name and table name dynamically, we can't
     // use nicely typed queries with LINQ. The monstrosity that follows is
     // primarily to work around that and fetch data.
     try
+      // TODO: Error handling if this query has no result.
+      let targetTable = oneTableBySchemaAndTableNames schemaName tableName
+      let columns = allColumnsByTable targetTable
+
+      // TODO: Explicit ORDER BY with primary key. Primary key info is available
+      //   in information_schema.columns.
+      let queryString = sprintf "SELECT * FROM %s LIMIT @limit" targetTable.TableName
+
       // Use ENV['SUPERB_MYSQL_CONNECTION_STRING'] to build the base connection
       // string. Then explicitly override the DB name so we connect to what the
       // caller gave us.
@@ -138,8 +148,8 @@ module MySQL =
 
         mutList <- { Values = enum |> Seq.toList } :: mutList
 
-      List.rev mutList
+      (List.rev mutList, columns |> Seq.toList)
     with err ->
       // TODO: Real error handling, of course.
       System.Console.WriteLine(sprintf "OH NO FAILURES! %s %A" (err.ToString()) err)
-      []
+      ([], [])

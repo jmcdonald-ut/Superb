@@ -146,9 +146,19 @@ type SuperbGraphQLGraphqlClient(url: string, headers: Header list) =
         """
                 query GetSampleOfTableRows($schemaName: String!, $tableName: String!, $count: Int!) {
                   tableRows(schemaName: $schemaName, tableName: $tableName, count: $count) {
-                    values {
-                      key
-                      value
+                    columns {
+                      columnKey
+                      columnName
+                      columnDefault
+                      columnComment
+                      dataType
+                      ordinalPosition
+                    }
+                    rows {
+                      values {
+                        key
+                        value
+                      }
                     }
                   }
                 }

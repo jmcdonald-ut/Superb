@@ -12,8 +12,10 @@ module Components =
   [<ReactComponent>]
   let CopiedTable (children: ReactElement seq) =
     Html.div [
-      prop.className "overflow-x-auto"
-      prop.children [ Daisy.table [ prop.className "min-w-full table-sm"; prop.children children ] ]
+      prop.className "flex-1 overflow-auto font-mono"
+      prop.children [
+        Daisy.table [ table.sm; table.zebra; prop.className "min-w-full"; prop.children children ]
+      ]
     ]
 
   [<ReactComponent>]
@@ -46,6 +48,7 @@ module Components =
     let select =
       Daisy.select [
         select.primary
+        select.sm
         select.bordered
         prop.value currentlySelected
         prop.onChange (fun (ev: Browser.Types.Event) ->
@@ -72,13 +75,21 @@ module Components =
     row.values |> (List.map _.value) |> List.map MySQLTableCell |> Html.tr
 
   [<ReactComponent>]
-  let MySQLTableRows (rows: TableRow list) =
+  let MySQLTableRows (rows: TableRow list) (columns: TableColumn list) =
     Daisy.card [
       card.bordered
+      card.compact
+      prop.className "max-h-full"
       prop.children [
         Daisy.cardBody [
-          Daisy.cardTitle [ prop.className "font-black"; prop.text "Rows" ]
-          CopiedTable [ Html.tableBody (List.map MySQLTableRow rows) ]
+          prop.className "flex flex-column overflow-hidden"
+          prop.children [
+            Daisy.cardTitle [ prop.className "font-black"; prop.text "Rows" ]
+            CopiedTable [
+              Html.thead (columns |> (List.map _.columnName) |> List.map Html.th)
+              Html.tableBody (List.map MySQLTableRow rows)
+            ]
+          ]
         ]
       ]
     ]
@@ -91,11 +102,16 @@ module Components =
     =
     let handleSelectedTableChange _ = onSelectedTableChange (Some table)
 
+    let className =
+      match selectedTable with
+      | Some({ tableName = actual }) when actual = table.tableName -> "active"
+      | _else -> ""
+
     // TODO: Use selectedTable to determine if the button is active (and apply
     //   a style signaling that).
     Html.li [
-      Daisy.button.button [
-        button.ghost
+      Html.button [
+        prop.className className
         prop.onClick handleSelectedTableChange
         prop.text table.tableName
       ]
@@ -121,11 +137,20 @@ module Components =
 
     Daisy.card [
       card.bordered
+      card.compact
+      prop.className "max-h-full"
       prop.children [
         Daisy.cardBody [
-          Daisy.cardTitle [ prop.className "font-black"; prop.text "Items" ]
-          Html.div [ prop.key "select-div"; prop.children connectedSchemaSelect ]
-          Html.ul listItemsOfTables
+          prop.className "flex flex-column overflow-hidden"
+          prop.children [
+            Daisy.cardTitle [ prop.className "font-black"; prop.text "Items" ]
+            Html.div [ prop.key "select-div"; prop.children connectedSchemaSelect ]
+            Daisy.menu [
+              menu.sm
+              prop.className "flex-1 flex-nowrap overflow-scroll gap-1 px-0"
+              prop.children listItemsOfTables
+            ]
+          ]
         ]
       ]
     ]

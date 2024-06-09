@@ -13,10 +13,10 @@ open SuperbUi.Shared.LayoutComponents
 module MySQLClient =
   [<ReactComponent>]
   let TablesContainer (selectedSchema: SelectedSchema) (selectedTable: SelectedTable) =
-    let (_rowsLoadingStatus, rows, _prior, _errors) =
+    let (_rowsLoadingStatus, sample, _prior, _errors) =
       useGetSampleOfTableRows 50 selectedSchema selectedTable
 
-    MySQLTableRows rows
+    MySQLTableRows sample.rows sample.columns
 
   [<ReactComponent>]
   let SchemataScreen () =
@@ -29,7 +29,7 @@ module MySQLClient =
     StandardLayout [
       Html.div [
         theme.nord
-        prop.className "px-6 w-full mx-auto grid grid-cols-3 py-4 gap-4"
+        prop.className "px-6 w-full mx-auto grid grid-rows-1 grid-cols-3 py-4 gap-4 max-h-full"
         prop.children [
           Html.div [
             prop.className "col col-span-1"

@@ -56,8 +56,8 @@ module Hooks =
   //   need the schema name, and that's available on the table record.
   [<Hook>]
   let useGetSampleOfTableRows (count: int) (selectedSchema: SelectedSchema) (selectedTable: SelectedTable) =
-    useGraphQLDeferred {
-      initialResult = []
+    useGraphQLDeferred<SampleOfTableRows, string list> {
+      initialResult = { columns = []; rows = [] }
       mapExceptionToError = (fun exn -> [ exn.ToString() ])
       operation =
         async {
@@ -67,7 +67,7 @@ module Hooks =
 
           match (selectedSchema, selectedTable) with
           | (None, _)
-          | (_, None) -> return Ok []
+          | (_, None) -> return Ok { columns = []; rows = [] }
           | (Some({ schemaName = schemaName }), Some({ tableName = tableName })) ->
             let input: GetSampleOfTableRows.InputVariables = {
               count = count
@@ -76,8 +76,12 @@ module Hooks =
             }
 
             match! client.GetSampleOfTableRows(input) with
-            | Ok { tableRows = Some(rows) } -> return rows |> normalizeListOfOptions |> Ok
-            | Ok { tableRows = None } -> return Ok []
+            | Ok { tableRows = tableRows } ->
+              return
+                Ok {
+                  rows = tableRows.rows
+                  columns = tableRows.columns
+                }
             | Error reasons -> return reasons |> (List.map _.message) |> Error
         }
       operationDependencies = [| box count; box selectedSchema; box selectedTable |]

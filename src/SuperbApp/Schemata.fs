@@ -126,9 +126,37 @@ module Schemata =
     [<GraphQLType(typeof<RequiredString>)>]
     member _.Value = row.Value
 
-  // TODO: This will also include a Columns field which provides metadata for
-  // each of the table's columns. Or maybe I'll add that to the TableType and
-  // embed that here. Not sure to be honest.
+  type ColumnType(column: MySQL.TableColumn) =
+    // TODO: Support more fields. Just rolling with this for now in the
+    //   interest of getting a MVP built out.
+    [<GraphQLType(typeof<RequiredString>)>]
+    member _.ColumnComment = column.ColumnComment
+
+    [<GraphQLType(typeof<RequiredString>)>]
+    member _.ColumnDefault = column.ColumnDefault
+
+    [<GraphQLType(typeof<RequiredString>)>]
+    member _.ColumnKey = column.ColumnKey
+
+    [<GraphQLType(typeof<RequiredString>)>]
+    member _.ColumnName = column.ColumnName
+
+    [<GraphQLType(typeof<RequiredString>)>]
+    member _.DataType = column.DataType
+
+    [<GraphQLType(typeof<RequiredString>)>]
+    member _.CharacterMaximumLength = column.CharacterMaximumLength
+
+    [<GraphQLType(typeof<Required<IntType>>)>]
+    member _.OrdinalPosition = column.OrdinalPosition
+
   type RowType(row: MySQL.Row) =
     [<GraphQLType(typeof<RequiredList<Required<ObjectType<RowFieldValueType>>>>)>]
     member _.Values = List.map RowFieldValueType row.Values
+
+  type SampleOfTableRowsType(rows: MySQL.Row seq, columns: MySQL.TableColumn seq) =
+    [<GraphQLType(typeof<RequiredList<Required<ObjectType<ColumnType>>>>)>]
+    member _.Columns = columns |> Seq.map ColumnType |> Seq.toList
+
+    [<GraphQLType(typeof<RequiredList<Required<ObjectType<RowType>>>>)>]
+    member _.Rows = rows |> Seq.map RowType |> Seq.toList
