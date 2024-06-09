@@ -11,13 +11,9 @@ module private InternalHelpers =
   let client: SuperbGraphQLGraphqlClient =
     SuperbGraphQLGraphqlClient(url = "https://localhost:7011/graphql")
 
-  let normalizeListOfOptions (list: 'ValueType option list) =
-    let intoNewListIfSomething (item: 'ValueType option) (newList: 'ValueType list) =
-      match item with
-      | Some listener -> listener :: newList
-      | None -> newList
-
-    List.foldBack intoNewListIfSomething list []
+  // Transforms list of option values to list of unwrapped Some values; None
+  // values are dropped.
+  let normalizeListOfOptions list = List.choose id list
 
 module Hooks =
   [<Hook>]

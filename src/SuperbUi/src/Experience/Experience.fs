@@ -7,38 +7,32 @@ open Feliz.Router
 open SuperbUi.Shared.LayoutComponents
 
 module Experience =
+  let notFoundTitle = "This is uncharted territory"
+  let goToDashboard = "Go to dashboard"
+
   [<ReactComponent>]
   let NotFoundErrorScreen (notFoundPath: string list) =
-    let notFoundExplanation =
-      notFoundPath
-      |> String.concat "/"
-      |> sprintf "Seriously, we can't find a matching page for /%s"
+    let pathString = String.concat "/" notFoundPath
+    let handleDashboardClick _ = Router.navigatePath ""
 
-    Html.div [
-      prop.className "flex flex-col min-h-screen"
-      prop.children [
-        NavBar()
-        Daisy.hero [
-          prop.className "flex-1"
-          prop.children [
-            Daisy.heroContent [
-              prop.className "text-center"
-              prop.children [
-                Html.div [
-                  prop.className "max-w-md"
-                  prop.children [
-                    Html.h1 [ prop.className "text-5xl font-bold"; prop.text "This is uncharted territory" ]
-                    Html.p [ prop.className "py-6"; prop.text notFoundExplanation ]
-                    Daisy.button.button [
-                      button.primary
-                      prop.onClick (fun _ -> Router.navigatePath "")
-                      prop.text "Go to Dashboard"
-                    ]
-                  ]
-                ]
-              ]
-            ]
-          ]
+    let notFoundExplanation =
+      sprintf "Seriously, we can't find a matching page for /%s" pathString
+
+    let heroContentChildren =
+      Html.div [
+        prop.className "max-w-md"
+        prop.children [
+          Html.h1 [ prop.className "text-5xl font-bold"; prop.text notFoundTitle ]
+          Html.p [ prop.className "py-6"; prop.text notFoundExplanation ]
+          Daisy.button.button [ button.primary; prop.onClick handleDashboardClick; prop.text goToDashboard ]
+        ]
+      ]
+
+    StandardLayout [
+      Daisy.hero [
+        prop.className "flex-1 h-full"
+        prop.children [
+          Daisy.heroContent [ prop.className "text-center"; prop.children heroContentChildren ]
         ]
       ]
     ]

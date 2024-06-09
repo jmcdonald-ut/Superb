@@ -5,8 +5,6 @@ open Feliz.UseDeferred
 
 open SuperbUi.Shared.Types
 
-/// TODO: Refactor <code>useGraphQLDeferred</code> into shared namespace,
-/// and generalize for GraphQL use.
 [<AutoOpen>]
 module private UseGraphQLDeferredHelpers =
   let mapToHasNotStarted (arg: GraphQLDeferredArg<'Content, 'Error>) (_: GraphQLDeferred<'Content, 'Error>) =

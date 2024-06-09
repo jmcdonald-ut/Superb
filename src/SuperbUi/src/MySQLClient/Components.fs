@@ -22,10 +22,8 @@ module Components =
   /// </summary>
   [<ReactComponent>]
   let SelectSchema (schemas: Schema list) (selected: SelectedSchema) (onSelect: SelectSchemaHandler) =
-    let renderOption (schema: Schema) =
-      Html.option [ prop.value schema.schemaName; prop.text schema.schemaName ]
-
-    let renderOptions = List.map renderOption
+    let renderOption ({ schemaName = name }: Schema) =
+      Html.option [ prop.value name; prop.text name ]
 
     let currentlySelected =
       match selected with
@@ -35,7 +33,7 @@ module Components =
     let placeholder =
       Html.option [ prop.disabled true; prop.value ""; prop.text "Open DB" ]
 
-    let allOptions = placeholder :: (renderOptions schemas)
+    let allOptions = placeholder :: (List.map renderOption schemas)
 
     let select =
       Daisy.select [

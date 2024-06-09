@@ -6,6 +6,8 @@ open HotChocolate.Types
 open SuperbApp.Features
 open SuperbApp.Schemata
 
+/// The root query type intended for use with GraphQL. Each member represents
+/// an available root field.
 type Query() =
   member _.GetSchemata() =
     MySQL.getListOfAllSchemas () |> Seq.map SchemaType |> Seq.toArray
@@ -27,6 +29,8 @@ type Query() =
     |> List.map StoryType
     |> List.toArray
 
+/// Root mutation type intended for use with GraphQL. Each member represents
+/// a mutation.
 type Mutation() =
   member _.ExecuteRedisCLICommand(command: string) =
     match RedisCLI.send command with

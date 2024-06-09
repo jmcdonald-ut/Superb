@@ -11,17 +11,12 @@ module private InternalGraphQLHelpers =
   let client: SuperbGraphQLGraphqlClient =
     SuperbGraphQLGraphqlClient(url = "https://localhost:7011/graphql")
 
-  let error (message: string) : SuperbGraphQL.ErrorType = { message = message }
   let errorMessage ({ message = message }: SuperbGraphQL.ErrorType) : string = message
   let mapToErrorMessages = List.map errorMessage
 
-  let normalizeListOfOptions (list: 'ValueType option list) =
-    let intoNewListIfSomething (item: 'ValueType option) (newList: 'ValueType list) =
-      match item with
-      | Some listener -> listener :: newList
-      | None -> newList
-
-    List.foldBack intoNewListIfSomething list []
+  // Transforms list of option values to list of unwrapped Some values; None
+  // values are dropped.
+  let normalizeListOfOptions list = List.choose id list
 
 module Hooks =
   [<Hook>]
@@ -58,7 +53,6 @@ module Hooks =
   let useRedisCLI () : RedisCLIHook =
     let (command: string, setCommand) = React.useState ("")
     let (errors: string list, setErrors) = React.useState ([])
-
     let (executed: RedisIOEntry list, updateExecuted) = React.useStateWithUpdater ([])
 
     let (|Prefix|_|) (prefix: string) (subject: string) =
@@ -77,7 +71,7 @@ module Hooks =
               didFail = didFail
             }
 
-            updateExecuted (fun list -> inputOutput :: list) |> ignore
+            updateExecuted (fun list -> inputOutput :: list)
 
           match! client.ExecuteRedisCLICommand { command = Some(command) } with
           | Ok({ executeRedisCLICommand = option }) ->
