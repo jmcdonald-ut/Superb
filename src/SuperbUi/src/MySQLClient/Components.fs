@@ -8,6 +8,14 @@ open SuperbUi.MySQLClient.Types
 open SuperbUi.Shared.Types
 
 module Components =
+  // TODO: Shared component?
+  [<ReactComponent>]
+  let CopiedTable (children: ReactElement seq) =
+    Html.div [
+      prop.className "overflow-x-auto"
+      prop.children [ Daisy.table [ prop.className "min-w-full table-sm"; prop.children children ] ]
+    ]
+
   [<ReactComponent>]
   let private SkeletonLi (_) =
     Html.li [
@@ -52,17 +60,73 @@ module Components =
 
     Daisy.formControl select
 
+  [<ReactComponent>]
+  let MySQLTableCell (value: string) =
+    Html.td [
+      prop.className "max-w-80 overflow-x-hidden text-nowrap text-ellipsis"
+      prop.text value
+    ]
+
+  [<ReactComponent>]
+  let MySQLTableRow (row: TableRow) =
+    // TODO: Fix GraphQL typing so values isn't an option type that wraps a
+    //   a list of option types. Super annoying.
+    let cells =
+      row.values
+      |> Option.get
+      |> List.map Option.get
+      |> (List.map _.value)
+      |> List.map MySQLTableCell
+
+    Html.tr cells
+
+  [<ReactComponent>]
+  let MySQLTableRows (rows: TableRow list) =
+    Daisy.card [
+      card.bordered
+      prop.children [
+        Daisy.cardBody [
+          Daisy.cardTitle [ prop.className "font-black"; prop.text "Rows" ]
+          CopiedTable [ Html.tableBody (List.map MySQLTableRow rows) ]
+        ]
+      ]
+    ]
+
+  [<ReactComponent>]
+  let MySQLSelectableTable
+    (selectedTable: SelectedTable)
+    (onSelectedTableChange: SelectedTable -> unit)
+    (table: SchemaTable)
+    =
+    let handleSelectedTableChange _ = onSelectedTableChange (Some table)
+
+    // TODO: Use selectedTable to determine if the button is active (and apply
+    //   a style signaling that).
+    Html.li [
+      Daisy.button.button [
+        button.ghost
+        prop.onClick handleSelectedTableChange
+        prop.text table.tableName
+      ]
+    ]
+
   /// <summary>
   /// Presents MySQL schemata, a control for selecting the schema, and the
   /// schema's tables.
   /// </summary>
   [<ReactComponent>]
-  let MySQLItems (loadingStatus) (connectedSchemaSelect: ReactElement) (tables: SchemaTable list) =
+  let MySQLItems
+    (loadingStatus)
+    (connectedSchemaSelect: ReactElement)
+    (tables: SchemaTable list)
+    (selectedTable: SelectedTable)
+    (onSelectedTableChange: SelectedTable -> unit)
+    =
     let listItemsOfTables =
       match loadingStatus with
       | HasNotStarted
       | IsLoading -> buildSkeletonListItems 50
-      | _anythingElse -> tables |> List.map _.tableName |> List.map Html.li
+      | _anythingElse -> tables |> List.map (MySQLSelectableTable selectedTable onSelectedTableChange)
 
     Daisy.card [
       card.bordered

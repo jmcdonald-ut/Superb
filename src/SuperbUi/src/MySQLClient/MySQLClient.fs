@@ -8,13 +8,23 @@ open SuperbUi.MySQLClient.Hooks
 open SuperbUi.MySQLClient.Types
 open SuperbUi.Shared.LayoutComponents
 
+// TODO: Handle overflowing content better so individual cards are scrollable.
+//   This would be preferable to the entire page being scrollable.
 module MySQLClient =
+  [<ReactComponent>]
+  let TablesContainer (selectedSchema: SelectedSchema) (selectedTable: SelectedTable) =
+    let (_rowsLoadingStatus, rows, _prior, _errors) =
+      useGetSampleOfTableRows 50 selectedSchema selectedTable
+
+    MySQLTableRows rows
+
   [<ReactComponent>]
   let SchemataScreen () =
     let (_schemasLoadingStatus, schemas, _prior, _errors) = useSchemata ()
-    let (selected, setSelected) = React.useState<Schema option> (None)
-    let schemaSelect = SelectSchema schemas selected setSelected
-    let (loadingStatus, tables, _prior, _errors) = useTables selected
+    let (selectedSchema, setSelectedSchema) = React.useState<SelectedSchema> (None)
+    let (selectedTable, setSelectedTable) = React.useState<SelectedTable> (None)
+    let schemaSelect = SelectSchema schemas selectedSchema setSelectedSchema
+    let (loadingStatus, tables, _prior, _errors) = useTables selectedSchema
 
     StandardLayout [
       Html.div [
@@ -23,9 +33,12 @@ module MySQLClient =
         prop.children [
           Html.div [
             prop.className "col col-span-1"
-            prop.children [ MySQLItems loadingStatus schemaSelect tables ]
+            prop.children [ MySQLItems loadingStatus schemaSelect tables selectedTable setSelectedTable ]
           ]
-          Html.div [ prop.className "col col-span-2"; prop.text "<PLACEHOLDER>" ]
+          Html.div [
+            prop.className "col col-span-2"
+            prop.children [ TablesContainer selectedSchema selectedTable ]
+          ]
         ]
       ]
     ]

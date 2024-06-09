@@ -36,9 +36,16 @@ open System.Linq
 /// string. Still, use with caution.
 /// </remarks>
 module MySQL =
+  /// TODO: Document behavior here. The type provider `SqlDataProvider` is more
+  ///   forgiving if the connection string includes extra props that it doesn't
+  ///   recognize. The connection string *builder* is not. If the env var has
+  ///   `port=`, the builder will throw.
+  ///
+  /// A thorough list of valid values is available at:
+  /// <see chref="https://learn.microsoft.com/en-us/dotnet/api/system.data.sqlclient.sqlconnection.connectionstring?view=netframework-4.8.1" />
   [<Literal>]
   let private connectionStr =
-    Env<"SUPERB_MYSQL_CONNECTION_STRING", "server=HOST;port=3306;uid=USER;pwd=PASSWORD;database=DB">.Value
+    Env<"SUPERB_MYSQL_CONNECTION_STRING", "server=HOST,PORT;uid=USER;pwd=PASSWORD;database=DB">.Value
 
   [<Literal>]
   let private dbVendor = Common.DatabaseProviderTypes.MYSQL
