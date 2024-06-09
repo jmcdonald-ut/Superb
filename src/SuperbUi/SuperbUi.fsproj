@@ -6,18 +6,18 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="src/index.html" />
-    <Compile Include="src/Hooks.fs" />
-    <Compile Include="src/Components.fs" />
+    <Compile Include="src/Shared/Types.fs" />
+    <Compile Include="src/Shared/Hooks.fs" />
+    <Compile Include="src/Shared/BaseComponents.fs" />
+    <Compile Include="src/Shared/LayoutComponents.fs" />
     <Compile Include="src/Experience/Experience.fs" />
     <Compile Include="src/MySQLClient/Types.fs" />
     <Compile Include="src/MySQLClient/Hooks.fs" />
     <Compile Include="src/MySQLClient/Components.fs" />
     <Compile Include="src/MySQLClient/MySQLClient.fs" />
-    <Compile Include="src/Dashboard/Components/DashboardModule.fs" />
-    <Compile Include="src/Dashboard/Components/HackerNewsFeed.fs" />
-    <Compile Include="src/Dashboard/Components/MySQLExplorer.fs" />
-    <Compile Include="src/Dashboard/Components/RedisCLI.fs" />
-    <Compile Include="src/Dashboard/Components/TcpListeners.fs" />
+    <Compile Include="src/Dashboard/Types.fs" />
+    <Compile Include="src/Dashboard/Hooks.fs" />
+    <Compile Include="src/Dashboard/Components.fs" />
     <Compile Include="src/Dashboard/Dashboard.fs" />
     <Compile Include="src/Extensions.fs" />
     <Compile Include="src/SuperbUi.fs" />

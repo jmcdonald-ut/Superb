@@ -3,10 +3,10 @@ namespace SuperbUi.MySQLClient
 open Feliz
 open Feliz.DaisyUI
 
-open SuperbUi
 open SuperbUi.MySQLClient.Components
 open SuperbUi.MySQLClient.Hooks
 open SuperbUi.MySQLClient.Types
+open SuperbUi.Shared.LayoutComponents
 
 module MySQLClient =
   [<ReactComponent>]
@@ -25,7 +25,7 @@ module MySQLClient =
       [| box tables; box selected |]
     )
 
-    Components.StandardLayout [
+    StandardLayout [
       Html.div [
         theme.nord
         prop.className "px-6 w-full mx-auto grid grid-cols-3 py-4 gap-4"

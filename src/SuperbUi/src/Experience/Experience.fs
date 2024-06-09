@@ -4,7 +4,7 @@ open Feliz
 open Feliz.DaisyUI
 open Feliz.Router
 
-open SuperbUi
+open SuperbUi.Shared.LayoutComponents
 
 module Experience =
   [<ReactComponent>]
@@ -17,7 +17,7 @@ module Experience =
     Html.div [
       prop.className "flex flex-col min-h-screen"
       prop.children [
-        Components.NavBar()
+        NavBar()
         Daisy.hero [
           prop.className "flex-1"
           prop.children [

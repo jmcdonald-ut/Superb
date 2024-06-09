@@ -2,6 +2,7 @@ namespace SuperbApp.Features
 
 open FSharp.Data.LiteralProviders
 open FSharp.Data.Sql
+open System.Data.SqlClient
 open System.Linq
 
 /// <summary>
@@ -71,3 +72,20 @@ module MySQL =
 
   /// Retrieves all visible tables within the given schema.
   let getListOfAllTablesInSchema (schemaName: string) = schemaName |> queryTables |> Seq.toList
+
+  let private getTableInSchema (schemaName: string) (tableName: string) : Table =
+    query {
+      for table in queryTables (schemaName) do
+        where (table.TableName = tableName)
+        select table
+        exactlyOne
+    }
+
+  let getFirst50RowsInTable (schemaName: string) (tableName: string) =
+    let table = getTableInSchema schemaName tableName
+    use connection = new SqlConnection(connectionStr)
+
+    use command =
+      new SqlCommand((sprintf "SELECT * FROM %s" table.TableName), connection)
+
+    command.ExecuteReader()
