@@ -8,6 +8,7 @@ open SuperbUi.Dashboard.Types
 open SuperbUi.MySQLClient.Hooks
 open SuperbUi.MySQLClient.Types
 open SuperbUi.Shared.BaseComponents
+open SuperbUi.Shared.Types
 
 [<AutoOpen>]
 module private InternalHelpers =
@@ -25,6 +26,17 @@ module private InternalDashboardComponents =
       prop.className "overflow-x-auto"
       prop.children [ Daisy.table [ prop.className "min-w-full table-sm"; prop.children children ] ]
     ]
+
+  [<ReactComponent>]
+  let SkeletonDashboardTableCell (index) =
+    Html.td [
+      prop.key (sprintf "skeleton-cell-%d" index)
+      prop.children (Daisy.skeleton [ prop.className "min-w-20 max-w-[75%] h-4" ])
+    ]
+
+  let buildSkeletonTableRows rowCount columnCount =
+    let columns = List.init columnCount SkeletonDashboardTableCell
+    List.init rowCount (fun _ -> Html.tr columns)
 
   [<ReactComponent>]
   let DashboardModule (title: string) (children: ReactElement seq) (maybeErrors: string list option) =
@@ -136,7 +148,13 @@ module Components =
   /// Displays the latest (top) Hacker News articles.
   [<ReactComponent>]
   let HackerNewsDashboardModule () =
-    let (_state, stories, _prior, maybeErrors) = useHackerNewsStories ()
+    let (loadStatus, stories, _prior, maybeErrors) = useHackerNewsStories ()
+
+    let tableRows =
+      match loadStatus with
+      | IsLoading
+      | HasNotStarted -> buildSkeletonTableRows 50 3
+      | _anythingElse -> List.map HackerNewsStoryRow stories
 
     let children = [
       DashboardTable [
@@ -147,7 +165,7 @@ module Components =
             Html.th [ prop.className "min-w-24"; prop.text "Comments" ]
           ]
         ]
-        Html.tbody (Seq.map HackerNewsStoryRow stories)
+        Html.tbody tableRows
       ]
     ]
 
@@ -156,7 +174,13 @@ module Components =
   /// Displays visible MySQL databases.
   [<ReactComponent>]
   let MySQLDashboardModule () =
-    let (_, schemas, _, maybeErrors) = useSchemata ()
+    let (loadStatus, schemas, _priorSchemas, maybeErrors) = useSchemata ()
+
+    let tableRows =
+      match loadStatus with
+      | IsLoading
+      | HasNotStarted -> buildSkeletonTableRows 10 5
+      | _anythingElse -> List.map SchemaRow schemas
 
     let children = [
       DashboardTable [
@@ -169,7 +193,7 @@ module Components =
             Html.th "Default Encryption"
           ]
         ]
-        Html.tbody (Seq.map SchemaRow schemas)
+        Html.tbody tableRows
       ]
     ]
 
@@ -197,14 +221,20 @@ module Components =
   /// Presents visible/active TCP listeners.
   [<ReactComponent>]
   let TcpListenersDashboardModule () =
-    let (_state, listeners, _prior, maybeErrors) = useTcpListeners ()
+    let (loadStatus, listeners, _prior, maybeErrors) = useTcpListeners ()
+
+    let tableRows =
+      match loadStatus with
+      | IsLoading
+      | HasNotStarted -> buildSkeletonTableRows 5 4
+      | _anythingElse -> List.map TcpRow listeners
 
     let children = [
       DashboardTable [
         Html.thead [
           Html.tr [ Html.th "Process"; Html.th "User"; Html.th "Command"; Html.th "Hosts" ]
         ]
-        Html.tbody (Seq.map TcpRow listeners)
+        Html.tbody tableRows
       ]
     ]
 

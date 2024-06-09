@@ -11,19 +11,10 @@ open SuperbUi.Shared.LayoutComponents
 module MySQLClient =
   [<ReactComponent>]
   let SchemataScreen () =
-    let (_, schemas, _, _) = useSchemata ()
+    let (_schemasLoadingStatus, schemas, _prior, _errors) = useSchemata ()
     let (selected, setSelected) = React.useState<Schema option> (None)
     let schemaSelect = SelectSchema schemas selected setSelected
-
-    let (_state, tables, _prior, _errors) = useTables selected
-
-    React.useEffect (
-      (fun () ->
-        let msg = sprintf "Tables: %A" tables
-        Browser.Dom.console.log msg
-        ()),
-      [| box tables; box selected |]
-    )
+    let (loadingStatus, tables, _prior, _errors) = useTables selected
 
     StandardLayout [
       Html.div [
@@ -32,7 +23,7 @@ module MySQLClient =
         prop.children [
           Html.div [
             prop.className "col col-span-1"
-            prop.children [ MySQLItems schemaSelect tables ]
+            prop.children [ MySQLItems loadingStatus schemaSelect tables ]
           ]
           Html.div [ prop.className "col col-span-2"; prop.text "<PLACEHOLDER>" ]
         ]
