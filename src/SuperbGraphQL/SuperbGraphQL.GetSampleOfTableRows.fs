@@ -8,10 +8,7 @@ type InputVariables = {
 }
 
 type RowFieldValueType = { key: string; value: string }
-
-type RowType = {
-  values: Option<list<Option<RowFieldValueType>>>
-}
+type RowType = { values: list<RowFieldValueType> }
 
 /// The root query type intended for use with GraphQL. Each member representsan available root field.
 type Query = {

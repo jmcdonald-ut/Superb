@@ -69,16 +69,7 @@ module Components =
 
   [<ReactComponent>]
   let MySQLTableRow (row: TableRow) =
-    // TODO: Fix GraphQL typing so values isn't an option type that wraps a
-    //   a list of option types. Super annoying.
-    let cells =
-      row.values
-      |> Option.get
-      |> List.map Option.get
-      |> (List.map _.value)
-      |> List.map MySQLTableCell
-
-    Html.tr cells
+    row.values |> (List.map _.value) |> List.map MySQLTableCell |> Html.tr
 
   [<ReactComponent>]
   let MySQLTableRows (rows: TableRow list) =
