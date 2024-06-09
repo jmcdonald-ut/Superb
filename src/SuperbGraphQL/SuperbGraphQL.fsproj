@@ -9,6 +9,7 @@
     <Compile Include="SuperbGraphQL.GetTables.fs" />
     <Compile Include="SuperbGraphQL.GetTcpListeners.fs" />
     <Compile Include="SuperbGraphQL.GetHackerNewsStories.fs" />
+    <Compile Include="SuperbGraphQL.GetSampleOfTableRows.fs" />
     <Compile Include="SuperbGraphQL.GetSchemata.fs" />
     <Compile Include="SuperbGraphQL.ExecuteRedisCLICommand.fs" />
     <Compile Include="SuperbGraphQL.GraphqlClient.fs" />

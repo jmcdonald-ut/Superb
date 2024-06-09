@@ -10,6 +10,7 @@ type StoryType = {
   url: string
 }
 
+/// The root query type intended for use with GraphQL. Each member representsan available root field.
 type Query = {
   hackerNewsStories: Option<list<Option<StoryType>>>
 }

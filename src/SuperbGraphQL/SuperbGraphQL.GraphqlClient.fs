@@ -140,6 +140,46 @@ type SuperbGraphQLGraphqlClient(url: string, headers: Header list) =
         return Error response.errors
     }
 
+  member _.GetSampleOfTableRows(input: GetSampleOfTableRows.InputVariables) =
+    async {
+      let query =
+        """
+                query GetSampleOfTableRows($schemaName: String!, $tableName: String!, $count: Int!) {
+                  tableRows(schemaName: $schemaName, tableName: $tableName, count: $count) {
+                    values {
+                      key
+                      value
+                    }
+                  }
+                }
+            """
+
+      let! response =
+        Http.request url
+        |> Http.method POST
+        |> Http.headers [ Headers.contentType "application/json"; yield! headers ]
+        |> Http.content (
+          BodyContent.Text(
+            Json.serialize {
+              query = query
+              variables = Some input
+            }
+          )
+        )
+        |> Http.send
+
+      match response.statusCode with
+      | 200 ->
+        let response =
+          Json.parseNativeAs<GraphqlSuccessResponse<GetSampleOfTableRows.Query>> response.responseText
+
+        return Ok response.data
+
+      | errorStatus ->
+        let response = Json.parseNativeAs<GraphqlErrorResponse> response.responseText
+        return Error response.errors
+    }
+
   member _.GetSchemata() =
     async {
       let query =

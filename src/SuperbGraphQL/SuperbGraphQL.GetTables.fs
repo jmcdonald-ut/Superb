@@ -27,6 +27,7 @@ type TableType = {
   version: Option<int>
 }
 
+/// The root query type intended for use with GraphQL. Each member representsan available root field.
 type Query = {
   tables: Option<list<Option<TableType>>>
 }

@@ -1,0 +1,8 @@
+query GetSampleOfTableRows($schemaName: String!, $tableName: String!, $count: Int!) {
+  tableRows(schemaName: $schemaName, tableName: $tableName, count: $count) {
+    values {
+      key
+      value
+    }
+  }
+}
