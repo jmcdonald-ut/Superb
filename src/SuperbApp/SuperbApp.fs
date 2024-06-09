@@ -18,6 +18,16 @@ type Query() =
     |> Seq.map TableType
     |> Seq.toArray
 
+  member _.GetTableRows
+    (
+      [<GraphQLType(typeof<NonNullType<StringType>>)>] schemaName: string,
+      [<GraphQLType(typeof<NonNullType<StringType>>)>] tableName: string,
+      [<GraphQLType(typeof<NonNullType<IntType>>)>] count: int
+    ) =
+    tableName
+    |> MySQL.dangerouslyTakeTableRowsDynamically count schemaName
+    |> List.map RowType
+
   member _.GetTcpListeners() =
     match TcpListeners.all () with
     | Ok list -> list |> List.map TcpListenerType |> List.toArray

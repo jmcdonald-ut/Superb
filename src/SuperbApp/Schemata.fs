@@ -4,6 +4,7 @@ open HotChocolate
 open HotChocolate.Types
 
 open SuperbApp.Features
+open SuperbApp.Features.MySQL
 
 module Schemata =
   type TcpListenerType(tcpListener: TcpListener) =
@@ -112,3 +113,18 @@ module Schemata =
 
     [<GraphQLType(typeof<IntType>)>]
     member _.Version = table.Version
+
+  type RowFieldValueType(row: MySQL.RowFieldValue) =
+    [<GraphQLType(typeof<NonNullType<StringType>>)>]
+    member _.Key = row.Key
+
+    // TODO: The non-null constraint is true right now, but I don't want to
+    // send empty string for null values. This will likely need to change.
+    [<GraphQLType(typeof<NonNullType<StringType>>)>]
+    member _.Value = row.Value
+
+  // TODO: This will also include a Columns field which provides metadata for
+  // each of the table's columns. Or maybe I'll add that to the TableType and
+  // embed that here. Not sure to be honest.
+  type RowType(row: MySQL.Row) =
+    member _.Values = List.map RowFieldValueType row.Values
